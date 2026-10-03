@@ -1138,10 +1138,11 @@ body {
 
 .goal-zh {
   display: inline-block;
-  margin-top: 20px;
+  margin: 4px 0 30px;
   color: var(--dim);
   letter-spacing: 8px;
   font-size: 13px;
+  text-indent: 8px;
 }
 
 .pillars {
@@ -1241,7 +1242,7 @@ body {
 
 .mxy-ink {
   stroke: #fff;
-  stroke-width: 2.6;
+  stroke-width: 2.2;
   stroke-linejoin: round;
   stroke-linecap: round;
   paint-order: stroke fill;
