@@ -342,7 +342,23 @@ body {
   z-index: 2;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: center;    /* 整块居中，但内部两行左对齐，让「熊」与「梦」同一起点 */
+}
+
+/* 名字 + 网名：同一块内左对齐，「熊」与「梦」严格共用左边界 */
+.hero-title-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;   /* 左对齐：两行同一起点 */
+  width: fit-content;        /* 宽度收缩到最宽那行（名字） */
+  margin-inline: auto;       /* 整块水平居中 */
+}
+
+.hero-name,
+.hero-nick {
+  text-align: left;
+  margin-left: 0;
+  margin-right: -.14em;      /* 抵消末字右侧字距，左边界才真实对齐 */
 }
 
 .hero-hud {
@@ -367,9 +383,6 @@ body {
   font-size: clamp(62px, 13vw, 156px);
   line-height: 1.06;
   letter-spacing: .14em;      /* 字间留白：0.04em -> 0.14em，拉开呼吸感 */
-  margin-right: -.14em;       /* 抵消末字右侧多出的一格字距，保持视觉居中 */
-  width: fit-content;
-  margin-inline: auto;
   background: linear-gradient(90deg, #52b2f2 0%, #3ce9a4 100%);
   -webkit-background-clip: text;
   background-clip: text;
@@ -414,16 +427,23 @@ body {
   align-items: baseline;
   gap: 14px;
   margin: 14px 0 4px;
-  font-size: clamp(24px, 4vw, 46px);
+  font-size: clamp(42px, 8.8vw, 106px); /* 比名字小一档：主次分明 */
   font-weight: 700;
-  letter-spacing: .28em;
+  letter-spacing: .14em;                 /* 与 .hero-name 同步，保持同呼吸感 */
   filter: drop-shadow(0 0 14px rgba(140, 120, 255, .38));
 }
 
 .hero-nick .hero-nick-en {
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: clamp(13px, 1.5vw, 20px);   /* 跟随主体放大，但仍作英文副标 */
   letter-spacing: 4px;
+}
+
+/* 窄屏：字号再收一档，避免「熊昭轶」+「梦逍遥」纵向叠高后撑破视口 */
+@media (max-width: 640px) {
+  .hero-name { font-size: clamp(46px, 15vw, 62px); }
+  .hero-nick { font-size: clamp(32px, 10vw, 42px); }
+  .hero-title-block { margin-inline: auto; }
 }
 
 .grad-text {
@@ -596,6 +616,19 @@ body {
 /* 降级动效时只留静态银白 */
 @media (prefers-reduced-motion: reduce) {
   .motto-text { animation: none; }
+}
+
+/* 窄屏：座右铭条字号收窄，否则 nowrap 长句会撑破视口 */
+@media (max-width: 640px) {
+  .motto { padding: clamp(22px, 6vw, 34px) 14px; }
+  .motto-text {
+    font-size: clamp(13px, 4.2vw, 20px);
+    letter-spacing: .1em;
+    text-indent: .1em;
+    white-space: normal;   /* 允许折行，长句在窄屏分两行 */
+    text-align: center;
+    line-height: 1.5;
+  }
 }
 
 /* ---------- 区块通用 ---------- */
@@ -1138,11 +1171,11 @@ body {
 
 .goal-zh {
   display: inline-block;
-  margin: 4px 0 30px;
+  margin: 0 0 40px;
   color: var(--dim);
-  letter-spacing: 8px;
-  font-size: 13px;
-  text-indent: 8px;
+  letter-spacing: 10px;
+  font-size: 20px;
+  text-indent: 10px;
 }
 
 .pillars {
