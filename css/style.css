@@ -298,10 +298,15 @@ body {
   font-size: clamp(62px, 13vw, 156px);
   line-height: 1.06;
   letter-spacing: .04em;
-  color: #fff;
-  text-shadow:
-    0 0 18px rgba(0, 229, 255, .55),
-    0 0 64px rgba(0, 229, 255, .22);
+  width: fit-content;
+  margin-inline: auto;
+  background: linear-gradient(90deg, #52b2f2 0%, #3ce9a4 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter:
+    drop-shadow(0 0 18px rgba(60, 233, 164, .32))
+    drop-shadow(0 0 52px rgba(82, 178, 242, .22));
 }
 
 .glitch {
@@ -315,18 +320,20 @@ body {
   inset: 0;
   overflow: hidden;
   opacity: .86;
+  background: linear-gradient(90deg, #52b2f2 0%, #3ce9a4 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .glitch::before {
   left: 0;
-  transform: translate(2px, -2px);
-  text-shadow: -2px 0 var(--pink);
+  text-shadow: 3px 0 var(--pink);
 }
 
 .glitch::after {
   left: 0;
-  transform: translate(-2px, 2px);
-  text-shadow: 2px 0 var(--cyan);
+  text-shadow: -3px 0 var(--cyan);
 }
 
 @keyframes glitch-a {
@@ -375,10 +382,11 @@ body {
 }
 
 .grad-text {
-  background: linear-gradient(180deg, #58d5ff 0%, #8f7bff 52%, #ff4fa3 100%);
+  background: linear-gradient(180deg, #2ddbff 0%, #9c8cff 52%, #ed46ac 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  line-height: 1.1; /* 收紧行盒：渐变蓝顶真正落在字面顶部（原先被半行距吃掉） */
 }
 
 .hero-signature {
