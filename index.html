@@ -16,6 +16,16 @@
   <div class="overlay noise" aria-hidden="true"></div>
   <div class="overlay vignette" aria-hidden="true"></div>
 
+  <!-- 背景音乐：it's 6pm but I miss u already.（音量 0.6 = 系统声音的 60%） -->
+  <audio id="bgm" src="audio/bgm.m4a" loop preload="auto"></audio>
+  <button class="audio-toggle mono" id="audioToggle" type="button"
+          aria-label="切换背景音乐" title="背景音乐 开 / 关">
+    <span class="audio-icon" aria-hidden="true">
+      <i></i><i></i><i></i><i></i>
+    </span>
+    <span class="audio-label" id="audioLabel">SOUND ON</span>
+  </button>
+
   <!-- 左右 HUD 信息轨 -->
   <aside class="rail rail-left mono" aria-hidden="true">
     <span>SYSTEM: ONLINE</span>
@@ -52,7 +62,7 @@
     </div>
 
     <div class="hero-content">
-      <h1 class="hero-name glitch" data-text="熊昭轶">熊昭轶</h1>
+      <h1 class="hero-name">熊昭轶</h1>
       <p class="hero-nick"><span class="grad-text">梦逍遥</span><span class="grad-text hero-nick-en">XY--M</span></p>
       <p class="hero-signature"><span id="signature">造物，求索，无限进步</span><span class="cursor">▌</span></p>
       <p class="hero-sub">云南大学本科在读 · AI Agent 驾驶员 · GitHub 造物者</p>
@@ -69,14 +79,9 @@
     </div>
   </header>
 
-  <!-- 跑马灯 -->
-  <div class="marquee mono" aria-hidden="true">
-    <div class="marquee-track">
-      <span>造物</span><i>◆</i><span>求索</span><i>◆</i><span>无限进步</span><i>◆</i>
-      <span>看书</span><i>◆</i><span>研究 AI</span><i>◆</i><span>WorkBuddy</span><i>◆</i><span>Trae</span><i>◆</i><span>Codex</span><i>◆</i>
-      <span>造物</span><i>◆</i><span>求索</span><i>◆</i><span>无限进步</span><i>◆</i>
-      <span>看书</span><i>◆</i><span>研究 AI</span><i>◆</i><span>WorkBuddy</span><i>◆</i><span>Trae</span><i>◆</i><span>Codex</span><i>◆</i>
-    </div>
+  <!-- 座右铭条：乔布斯式金属银白，若隐若现的灯光感（不滚动） -->
+  <div class="motto mono" aria-hidden="true">
+    <span class="motto-text" data-text="Stay Hungry, Stay Foolish">Stay Hungry, Stay Foolish</span>
   </div>
 
   <main>
@@ -249,7 +254,7 @@
           <span class="sec-line" aria-hidden="true"></span>
         </div>
         <div class="goal-quote reveal">
-          <p class="goal-big glitch-soft" data-text="非计算机类专业最会用 AI 的学生">非计算机类专业<br>最会用 AI 的学生</p>
+          <p class="goal-big">非计算机类专业<br>最会用 AI 的学生</p>
           <p class="goal-zh">立志成为</p>
         </div>
         <div class="pillars">
@@ -274,6 +279,33 @@
         </div>
       </div>
     </section>
+    <!-- 06 专属字体 -->
+    <section class="section" id="type">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="sec-index mono">06</span>
+          <h2 class="sec-title">TYPEFACE<span class="zh">专属字体</span></h2>
+          <span class="sec-line" aria-hidden="true"></span>
+        </div>
+
+        <div class="lockup reveal">
+          <div class="lockup-grid" aria-hidden="true"></div>
+          <div class="lockup-art" data-glyph-lockup>
+            <!-- 字形由 js/mxy-glyph.js 的路径数据 + js/main.js 生成，不依赖任何系统字体 -->
+            <noscript><p class="lockup-sig">梦逍遥</p></noscript>
+          </div>
+          <div class="lockup-cap mono">
+            <span>MENGXIAOYAO</span>
+            <span class="sep">/</span>
+            <span>手写 SVG 笔画</span>
+            <span class="sep">/</span>
+            <span>不依赖字体文件</span>
+          </div>
+          <p class="lockup-sig">飘逸 · 无拘 · 自由 · 浪漫 · 坚定</p>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <footer class="footer">
@@ -282,6 +314,7 @@
     <p class="mono footer-end">END_OF_PROFILE ▮</p>
   </footer>
 
+  <script src="js/mxy-glyph.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

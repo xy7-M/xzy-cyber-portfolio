@@ -126,6 +126,75 @@ body {
 .rail-right span:nth-child(2) { color: var(--purple); }
 .rail-right span:nth-child(3) { color: var(--pink); }
 
+/* ---------- 背景音乐开关（右下角，避开 HUD 信息轨） ---------- */
+.audio-toggle {
+  position: fixed;
+  right: 26px;
+  bottom: 26px;
+  z-index: 60;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px 10px 14px;
+  background: rgba(8, 13, 27, .88);
+  border: 1px solid var(--line);
+  color: var(--cyan);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 2.4px;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: border-color .25s, box-shadow .25s, color .25s;
+}
+
+.audio-toggle:hover {
+  border-color: var(--cyan);
+  color: #fff;
+  box-shadow: 0 0 22px rgba(0, 229, 255, .38);
+}
+
+/* 四根跳动音柱：播放时起伏，暂停时压平 */
+.audio-icon {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+}
+
+.audio-icon i {
+  display: block;
+  width: 2px;
+  height: 100%;
+  background: currentColor;
+  box-shadow: 0 0 8px currentColor;
+  transform-origin: bottom;
+  transform: scaleY(.28);
+  transition: transform .3s;
+}
+
+.audio-toggle.is-on .audio-icon i {
+  animation: audio-eq .95s ease-in-out infinite alternate;
+}
+
+.audio-toggle.is-on .audio-icon i:nth-child(1) { animation-delay: 0s; }
+.audio-toggle.is-on .audio-icon i:nth-child(2) { animation-delay: .18s; }
+.audio-toggle.is-on .audio-icon i:nth-child(3) { animation-delay: .34s; }
+.audio-toggle.is-on .audio-icon i:nth-child(4) { animation-delay: .52s; }
+
+@keyframes audio-eq {
+  from { transform: scaleY(.28); }
+  to   { transform: scaleY(1); }
+}
+
+/* 关闭态：整块按钮转为灰暗 */
+.audio-toggle:not(.is-on) { color: var(--dim); border-color: rgba(143, 160, 201, .3); }
+
+@media (max-width: 640px) {
+  .audio-toggle { right: 14px; bottom: 14px; padding: 9px 12px; }
+  .audio-label { display: none; }
+}
+
 /* ---------- 导航 ---------- */
 .nav {
   position: fixed;
@@ -297,7 +366,8 @@ body {
   font-weight: 900;
   font-size: clamp(62px, 13vw, 156px);
   line-height: 1.06;
-  letter-spacing: .04em;
+  letter-spacing: .14em;      /* 字间留白：0.04em -> 0.14em，拉开呼吸感 */
+  margin-right: -.14em;       /* 抵消末字右侧多出的一格字距，保持视觉居中 */
   width: fit-content;
   margin-inline: auto;
   background: linear-gradient(90deg, #52b2f2 0%, #3ce9a4 100%);
@@ -305,35 +375,10 @@ body {
   background-clip: text;
   color: transparent;
   filter:
+    drop-shadow(3px 0 0 rgba(255, 42, 109, .75))
+    drop-shadow(-3px 0 0 rgba(0, 229, 255, .75))
     drop-shadow(0 0 18px rgba(60, 233, 164, .32))
     drop-shadow(0 0 52px rgba(82, 178, 242, .22));
-}
-
-.glitch {
-  position: relative;
-}
-
-.glitch::before,
-.glitch::after {
-  content: attr(data-text);
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  opacity: .86;
-  background: linear-gradient(90deg, #52b2f2 0%, #3ce9a4 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.glitch::before {
-  left: 0;
-  text-shadow: 3px 0 var(--pink);
-}
-
-.glitch::after {
-  left: 0;
-  text-shadow: -3px 0 var(--cyan);
 }
 
 @keyframes glitch-a {
@@ -471,32 +516,86 @@ body {
 .meta-label { color: var(--dim); margin-right: 10px; }
 .meta-value { color: var(--cyan); }
 
-/* ---------- 跑马灯 ---------- */
-.marquee {
+/* ---------- 座右铭条：乔布斯式金属银白 · 坏灯管式若隐若现（静态不滚动） ---------- */
+.motto {
   position: relative;
   z-index: 5;
-  overflow: hidden;
-  background: var(--bg-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #07090f;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
-  padding: 13px 0;
+  padding: clamp(30px, 4.2vw, 62px) 24px;   /* 底栏高度：撑到截图框那种厚度 */
 }
 
-.marquee-track {
-  display: inline-flex;
-  gap: 32px;
+.motto-text {
+  position: relative;
+  font-family: var(--font-mono);
+  font-weight: 800;                          /* 加粗：厚重 */
+  font-size: clamp(26px, 3.6vw, 58px);       /* 12px -> 最大 58px */
+  line-height: 1;
+  letter-spacing: .16em;
+  text-indent: .16em;                        /* 抵消末字右侧多出的字距，保持绝对居中 */
   white-space: nowrap;
-  animation: marquee 22s linear infinite;
-  font-size: 13px;
-  letter-spacing: 4px;
-  color: var(--cyan);
+  /* 金属银白渐变：亮带偏移制造拉丝高光 */
+  background: linear-gradient(
+    100deg,
+    #5f6773 0%,
+    #b9c0c9 18%,
+    #ffffff 34%,
+    #eef1f5 44%,
+    #7f8792 58%,
+    #ccd2d9 78%,
+    #6b737f 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  /* 厚重感：多层阴影压出体积 + 冷银辉光 */
+  filter:
+    drop-shadow(0 1px 0 rgba(255, 255, 255, .22))
+    drop-shadow(0 4px 14px rgba(0, 0, 0, .55))
+    drop-shadow(0 0 22px rgba(210, 226, 255, .30));
+  /* 主体缓慢呼吸 + 坏灯管式随机掉电 */
+  animation: motto-breathe 7.5s ease-in-out infinite,
+             motto-flicker 6.5s steps(1, end) infinite;
 }
 
-.marquee-track span:nth-child(6n+1) { color: var(--dim); }
-.marquee-track i { font-style: normal; color: var(--pink); }
+/* 接触不良的暗闪：偶发短促掉电，不是规律闪烁 */
+@keyframes motto-flicker {
+  0%,   6.2%,  6.8%, 100% { opacity: 1; }
+  6.4%  { opacity: .34; }
+  41.0% { opacity: 1; }
+  41.2% { opacity: .48; }
+  41.6% { opacity: .92; }
+  41.9% { opacity: .30; }
+  42.2% { opacity: 1; }
+  78.3% { opacity: 1; }
+  78.5% { opacity: .22; }
+  78.9% { opacity: .85; }
+  79.2% { opacity: 1; }
+}
 
-@keyframes marquee {
-  to { transform: translateX(-50%); }
+/* 慢速明暗呼吸，让银白像有电压起伏 */
+@keyframes motto-breathe {
+  0%, 100% {
+    filter:
+      drop-shadow(0 1px 0 rgba(255, 255, 255, .20))
+      drop-shadow(0 4px 14px rgba(0, 0, 0, .55))
+      drop-shadow(0 0 16px rgba(210, 226, 255, .18));
+  }
+  50% {
+    filter:
+      drop-shadow(0 1px 0 rgba(255, 255, 255, .30))
+      drop-shadow(0 4px 16px rgba(0, 0, 0, .60))
+      drop-shadow(0 0 34px rgba(226, 236, 255, .55));
+  }
+}
+
+/* 降级动效时只留静态银白 */
+@media (prefers-reduced-motion: reduce) {
+  .motto-text { animation: none; }
 }
 
 /* ---------- 区块通用 ---------- */
@@ -1045,28 +1144,6 @@ body {
   font-size: 13px;
 }
 
-.glitch-soft { position: relative; }
-.glitch-soft::before,
-.glitch-soft::after {
-  content: attr(data-text);
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  pointer-events: none;
-}
-.glitch-soft:hover::before {
-  opacity: .75;
-  color: var(--pink);
-  left: 2px;
-  animation: glitch-a 1s steps(2) infinite;
-}
-.glitch-soft:hover::after {
-  opacity: .75;
-  color: var(--cyan);
-  left: -2px;
-  animation: glitch-b 1.2s steps(2) infinite;
-}
-
 .pillars {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1116,6 +1193,83 @@ body {
 .pillar p:not(.en) {
   color: var(--dim);
   font-size: 14px;
+}
+
+/* ---------- 06 专属字体：梦逍遥（手写 SVG 艺术字，不依赖系统字体） ---------- */
+.lockup {
+  position: relative;
+  padding: 40px 0 34px;
+  background: radial-gradient(120% 90% at 50% 40%, rgba(0, 229, 255, .05), transparent 62%);
+}
+.lockup::before,
+.lockup::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--line) 18%, var(--line) 82%, transparent);
+}
+.lockup::before { top: 0; }
+.lockup::after { bottom: 0; }
+
+/* 背景点阵：既呼应参考图的背景格点，也给手写字加一层工业网格 */
+.lockup-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 229, 255, .10) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 255, .10) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(90% 80% at 50% 50%, #000 12%, transparent 76%);
+  -webkit-mask-image: radial-gradient(90% 80% at 50% 50%, #000 12%, transparent 76%);
+  opacity: .5;
+  pointer-events: none;
+}
+
+.lockup-art {
+  position: relative;
+  width: min(100%, 720px); /* 参考图比例：整体宽约为单字高的 2.9 倍 */
+  margin: 0 auto;
+}
+.lockup-svg { width: 100%; height: auto; display: block; }
+
+/* 霓虹：渐变填色保证紫粉调「全饱和」；恒宽白边负责参考图那种灯管亮边，
+   同时把穿插在一起的相邻笔画分开，避免两字糊成一团。
+   注意 stroke-width 是用户单位，会随字号缩放 —— 改 font-size 时需同步复核。 */
+.mxy-glow { filter: drop-shadow(0 0 20px rgba(0, 229, 255, .40)) drop-shadow(0 0 48px rgba(237, 70, 172, .26)); }
+
+.mxy-ink {
+  stroke: #fff;
+  stroke-width: 2.6;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  paint-order: stroke fill;
+}
+
+/* 仅屏幕阅读器可见：SVG 是纯装饰曲线，语义交给 aria-label */
+.lockup-cap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  margin-top: 26px;
+  color: var(--dim);
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-align: center;
+  flex-wrap: wrap;
+}
+.lockup-cap .sep { color: var(--cyan); opacity: .6; }
+
+.lockup-sig {
+  text-align: center;
+  margin-top: 13px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 5px;
+  color: var(--cyan);
+  opacity: .55;
 }
 
 /* ---------- 页脚 ---------- */
@@ -1238,6 +1392,8 @@ body {
   }
 
   .sec-line { display: none; }
+  .lockup-art { width: 100%; }
+  .lockup-cap { letter-spacing: 2px; }
 }
 
 /* ---------- 减少动效 ---------- */

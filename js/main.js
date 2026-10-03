@@ -2,13 +2,23 @@
    赛博档案站脚本
    矩阵雨(两侧页边) / 中央球形流动粒子云 / 开机引导 / 打字机 / 滚动入场 / 计数 / 导航
    ============================================================ */
-
 (function () {
   'use strict';
 
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* ---------- 字体就绪闸门 ----------
+     矩阵雨用的是等宽字体，若在字体 swap 前就开跑，
+     已落下的字符会带着旧字形永远留在尾迹里。
+     等 document.fonts.ready 后再启动一次，让整屏重排为最终字形。 */
+  const fontsReady = (document.fonts && document.fonts.ready)
+    ? document.fonts.ready
+    : Promise.resolve();
+
   /* ---------- 矩阵雨：只落两侧页边，中央让位粒子云 ---------- */
+  /* 全局慢速系数 0.5：与粒子云自转（angle += dt * 0.0000825）同频
+     —— 粒子云约 76s 转一整圈，矩阵雨每格约 1.6s 落一格，两者节奏一致 */
+  const RAIN_SPEED = 0.05;
   const canvas = document.getElementById('matrix');
   if (canvas) {
     const ctx = canvas.getContext('2d');
@@ -52,7 +62,7 @@
     }
 
     function draw() {
-      ctx.fillStyle = 'rgba(4, 6, 13, 0.025)'; // 拖尾淡出再放慢，配合降速保持尾迹长度
+      ctx.fillStyle = 'rgba(4, 6, 13, 0.0125)'; // 拖尾淡出同步减半，下落放慢后尾迹长度才保持一致
       ctx.fillRect(0, 0, width, height);
       ctx.font = fontSize + 'px Consolas, "Microsoft YaHei UI", monospace';
       ctx.textAlign = 'center';
@@ -78,7 +88,7 @@
         if (y > height && Math.random() > 0.975) {
           drops[i] = 0;
         } else {
-          drops[i] += 0.1; // 下落速度：0.2 -> 0.1（再减半）
+          drops[i] += RAIN_SPEED; // 与粒子云同频的慢速下落
         }
       });
 
@@ -87,17 +97,24 @@
 
     resize();
     window.addEventListener('resize', resize);
-    if (!reduced) requestAnimationFrame(draw);
+    if (!reduced) {
+      // 字体落地后清一次画布：早期字形不会留在尾迹中
+      fontsReady.then(function () {
+        ctx.fillStyle = 'rgba(4, 6, 13, 1)';
+        ctx.fillRect(0, 0, width, height);
+      });
+      requestAnimationFrame(draw);
+    }
   }
 
   /* ---------- 中央球形流动粒子云 ----------
      移植自 赛博未来科技 CSS 系统 v1「背景层 · 粒子云」：
-     560 个透视投影旋转点云（窄屏/低配 200），球面分布 + 鼠标视差 + 闪烁 */
+     560 个透视投影旋转点云（窄屏/低配 200），球面分布 + 匀速自转 + 闪烁
+     注：已移除鼠标视差，粒子云不受指针影响，只按自身节奏旋转 */
   const cloudCanvas = document.getElementById('cloud');
   if (cloudCanvas) {
     const cctx = cloudCanvas.getContext('2d');
     const lowEnd = (navigator.hardwareConcurrency || 8) <= 4;
-    const ptr = { x: 0.5, y: 0.5 };
     let cw = 0;
     let ch = 0;
     let pts = [];
@@ -153,8 +170,9 @@
       const cy = ch * 0.50; // 球心下移：上下留白对称（原 0.40 下方空、上方挤）
       const R = Math.min(cw, ch) * 0.46;
       const FOV = 1.9;
-      const yaw = angle + (ptr.x - 0.5) * 0.55;
-      const tilt = (ptr.y - 0.5) * 0.40;
+      // 固定视角：只保留自转 yaw 与恒定倾角，不再跟随鼠标
+      const yaw = angle;
+      const tilt = -0.16;
       const ca = Math.cos(yaw), sa = Math.sin(yaw);
       const cb = Math.cos(tilt), sb = Math.sin(tilt);
 
@@ -184,14 +202,110 @@
       requestAnimationFrame(loopCloud);
     }
 
-    window.addEventListener('mousemove', function (e) {
-      ptr.x = e.clientX / Math.max(cw, 1);
-      ptr.y = e.clientY / Math.max(ch, 1);
-    }, { passive: true });
-
     sizeCloud();
     window.addEventListener('resize', sizeCloud);
     if (!reduced) requestAnimationFrame(loopCloud);
+  }
+
+  /* ---------- 专属字体「梦逍遥」：把字形数据渲染成霓虹 SVG ----------
+     单层结构：路径本身填「逐字三段渐变」（颜色全饱和、不被任何白芯冲淡），
+               再描一圈恒定宽度的白边 —— 既是参考图的亮边，也把相邻笔画分开。
+     排布：每字一格 144 单位（字身 148~163 宽），靠 viewBox 的负起点 + 余宽
+           形成 5~15 单位的穿插咬合，三字像被一笔带过而非三个方砖。
+     纪律：每字只能有「一个」path，否则渐变会按 path 数量平分取色、整体被撕裂。 */
+  var glyphHost = document.querySelector('[data-glyph-lockup]');
+  if (glyphHost && window.MXY_GLYPHS) {
+    var XL = 144;
+    var VB = { x: -14, y: -14, w: XL * 3 + 28, h: 272 };
+
+    var strokes = window.MXY_GLYPHS.map(function (g, i) {
+      return '<g transform="translate(' + (i * XL) + ',0)">' +
+        '<path class="mxy-ink" fill="url(#mxyInk' + i + ')" d="' + g.paths.join(' ') + '"/>' +
+      '</g>';
+    }).join('');
+
+    var defs = '<defs>' + window.MXY_GLYPHS.map(function (g, i) {
+      return '<linearGradient id="mxyInk' + i + '" x1="0" y1="0" x2="0" y2="1">' +
+        '<stop offset="0%" stop-color="' + g.from + '"/>' +
+        '<stop offset="46%" stop-color="' + g.mid + '"/>' +
+        '<stop offset="100%" stop-color="' + g.to + '"/>' +
+        '</linearGradient>';
+    }).join('') + '</defs>';
+
+    glyphHost.innerHTML = '' +
+      '<svg class="lockup-svg" viewBox="' + VB.x + ' ' + VB.y + ' ' + VB.w + ' ' + VB.h + '" ' +
+        'role="img" aria-label="梦逍遥 专属艺术字体" xmlns="http://www.w3.org/2000/svg">' +
+        defs +
+        '<g class="mxy-glow">' + strokes + '</g>' +
+      '</svg>';
+  }
+
+  /* ---------- 背景音乐 ----------
+     it's 6pm but I miss u already. · 循环播放 · 音量 0.6（系统声音的 60%）
+     浏览器禁止无交互自动播放：先静音尝试，失败则等首次交互再放 */
+  const bgm = document.getElementById('bgm');
+  const audioToggle = document.getElementById('audioToggle');
+  const audioLabel = document.getElementById('audioLabel');
+  const BGM_VOLUME = 0.6;
+
+  if (bgm) {
+    bgm.volume = BGM_VOLUME;
+    bgm.loop = true;
+
+    let playing = false;
+
+    function paint() {
+      if (audioToggle) audioToggle.classList.toggle('is-on', playing);
+      if (audioLabel) audioLabel.textContent = playing ? 'SOUND ON' : 'SOUND OFF';
+    }
+
+    function play() {
+      const p = bgm.play();
+      if (p && p.then) {
+        p.then(function () {
+          playing = true;
+          paint();
+        }).catch(function () {
+          playing = false;
+          paint();
+        });
+      }
+    }
+
+    // 静音自动播放 → 成功后解除静音，绕过自动播放限制
+    bgm.muted = true;
+    play();
+
+    function unlock() {
+      bgm.muted = false;
+      bgm.volume = BGM_VOLUME;
+      if (!playing) play();
+      window.removeEventListener('pointerdown', unlock);
+      window.removeEventListener('keydown', unlock);
+      window.removeEventListener('touchstart', unlock);
+    }
+
+    window.addEventListener('pointerdown', unlock, { once: true });
+    window.addEventListener('keydown', unlock, { once: true });
+    window.addEventListener('touchstart', unlock, { once: true });
+
+    // 手动开关
+    if (audioToggle) {
+      audioToggle.addEventListener('click', function (e) {
+        e.stopPropagation(); // 不触发 unlock 的自动恢复逻辑打架
+        if (playing) {
+          bgm.pause();
+          playing = false;
+          paint();
+        } else {
+          bgm.muted = false;
+          bgm.volume = BGM_VOLUME;
+          play();
+        }
+      });
+    }
+
+    paint();
   }
 
   /* ---------- 开机引导 + 签名打字机 ---------- */
