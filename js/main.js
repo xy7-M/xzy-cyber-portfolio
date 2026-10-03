@@ -147,10 +147,10 @@
     }
 
     function drawCloud(dt) {
-      angle += dt * 0.000055;
+      angle += dt * 0.0000825; // 0.000055 × 1.5：流动提速
       cctx.clearRect(0, 0, cw, ch);
       const cx = cw * 0.5;
-      const cy = ch * 0.40;
+      const cy = ch * 0.50; // 球心下移：上下留白对称（原 0.40 下方空、上方挤）
       const R = Math.min(cw, ch) * 0.46;
       const FOV = 1.9;
       const yaw = angle + (ptr.x - 0.5) * 0.55;
