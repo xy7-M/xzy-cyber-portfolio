@@ -1,3 +1,7 @@
 app/dist/
 app/node_modules/
 tools/*.png
+tools/.chrome-profile/
+tools/iso*.png
+tools/lockup-*.png
+tools/zoom*.png
