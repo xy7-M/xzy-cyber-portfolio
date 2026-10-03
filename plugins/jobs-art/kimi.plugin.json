@@ -1,0 +1,20 @@
+{
+  "$schema": "https://catalog.msh.team/misc/kimi.plugin.schema.json",
+  "name": "jobs-art",
+  "version": "0.1.0",
+  "description": "以史蒂夫·乔布斯的艺术/设计思想作为思维透镜，分析与回答产品设计、美学、品味、极简主义、科技×人文等创作问题",
+  "keywords": ["乔布斯", "Steve Jobs", "设计", "美学", "极简主义", "产品设计", "品味"],
+  "author": "Local developer",
+  "license": "MIT",
+  "skillInstructions": "当用户想用乔布斯的视角/口吻评论设计、产品或创作，或需要乔布斯式的设计决策框架、极简/品味/工艺/科技×人文主题探讨、keynote 式表达时，加载 jobs-art 技能。",
+  "interface": {
+    "displayName": "乔布斯美学",
+    "shortDescription": "在 Kimi 里使用 乔布斯美学",
+    "longDescription": "以史蒂夫·乔布斯的艺术/设计思想作为思维透镜，分析与回答产品设计、美学、品味、极简主义、科技×人文等创作问题",
+    "developerName": "Local developer",
+    "websiteURL": "",
+    "iconUrl": "",
+    "category": "PRODUCTIVITY"
+  },
+  "skills": "./skills/"
+}

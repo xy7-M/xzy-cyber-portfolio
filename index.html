@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>熊昭轶 · 梦逍遥 — 造物 · 求索 · 无限进步</title>
+  <meta name="description" content="熊昭轶的个人赛博档案：云南大学本科在读，AI Agent 驾驶员，GitHub 造物者。立志成为非计算机类专业最会用 AI 的学生。">
+  <meta name="theme-color" content="#04060d">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='6' y='6' width='52' height='52' fill='%2304060d' stroke='%2300e5ff' stroke-width='4'/%3E%3Cpath d='M20 20 L32 42 L44 20' stroke='%23ff2a6d' stroke-width='6' fill='none'/%3E%3Ccircle cx='32' cy='46' r='4' fill='%23fde047'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <canvas id="matrix" aria-hidden="true"></canvas>
+  <canvas id="cloud" aria-hidden="true"></canvas>
+  <div class="overlay scanlines" aria-hidden="true"></div>
+  <div class="overlay noise" aria-hidden="true"></div>
+  <div class="overlay vignette" aria-hidden="true"></div>
+
+  <!-- 左右 HUD 信息轨 -->
+  <aside class="rail rail-left mono" aria-hidden="true">
+    <span>SYSTEM: ONLINE</span>
+    <span>UPLINK: 云南大学</span>
+    <span id="clock">--:--:--</span>
+  </aside>
+  <aside class="rail rail-right mono" aria-hidden="true">
+    <span>BUILD</span>
+    <span>EXPLORE</span>
+    <span>PUBLISH</span>
+  </aside>
+
+  <!-- 导航 -->
+  <nav class="nav" id="nav">
+    <a class="brand" href="#hero"><span class="brand-prompt">&gt;</span>梦逍遥 <span class="brand-sub">/ 熊昭轶</span></a>
+    <button class="nav-toggle mono" id="navToggle" aria-label="打开菜单">MENU</button>
+    <ul class="nav-links mono" id="navLinks">
+      <li><a href="#identity">身份</a></li>
+      <li><a href="#quest">征途</a></li>
+      <li><a href="#system">能力</a></li>
+      <li><a href="#archive">档案</a></li>
+      <li><a href="#goal">志向</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero" id="hero">
+    <div class="hero-hud mono" id="bootText" aria-hidden="true"></div>
+    <div class="hero-grid" aria-hidden="true"></div>
+    <div class="hero-core" aria-hidden="true">
+      <span class="core-ring ring-a"></span>
+      <span class="core-ring ring-b"></span>
+      <span class="core-dot"></span>
+    </div>
+
+    <div class="hero-content">
+      <h1 class="hero-name glitch" data-text="熊昭轶">熊昭轶</h1>
+      <p class="hero-nick"><span class="grad-text">梦逍遥</span><span class="grad-text hero-nick-en">XY--M</span></p>
+      <p class="hero-signature"><span id="signature">造物，求索，无限进步</span><span class="cursor">▌</span></p>
+      <p class="hero-sub">云南大学本科在读 · AI Agent 驾驶员 · GitHub 造物者</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#quest">READ_LOG 读取征途</a>
+      </div>
+    </div>
+
+    <div class="hero-meta mono" aria-hidden="true">
+      <div class="meta-item"><span class="meta-label">STATUS</span><span class="meta-value">ONLINE</span></div>
+      <div class="meta-item"><span class="meta-label">LOCATION</span><span class="meta-value">云南大学</span></div>
+      <div class="meta-item"><span class="meta-label">MODE</span><span class="meta-value">造物 / 求索 / 无限进步</span></div>
+      <div class="meta-item"><span class="meta-label">OBJECTIVE</span><span class="meta-value">非计算机专业 × AI</span></div>
+    </div>
+  </header>
+
+  <!-- 跑马灯 -->
+  <div class="marquee mono" aria-hidden="true">
+    <div class="marquee-track">
+      <span>造物</span><i>◆</i><span>求索</span><i>◆</i><span>无限进步</span><i>◆</i>
+      <span>看书</span><i>◆</i><span>研究 AI</span><i>◆</i><span>WorkBuddy</span><i>◆</i><span>Trae</span><i>◆</i><span>Codex</span><i>◆</i>
+      <span>造物</span><i>◆</i><span>求索</span><i>◆</i><span>无限进步</span><i>◆</i>
+      <span>看书</span><i>◆</i><span>研究 AI</span><i>◆</i><span>WorkBuddy</span><i>◆</i><span>Trae</span><i>◆</i><span>Codex</span><i>◆</i>
+    </div>
+  </div>
+
+  <main>
+    <!-- 01 身份档案 -->
+    <section class="section" id="identity">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="sec-index mono">01</span>
+          <h2 class="sec-title">IDENTITY<span class="zh">身份档案</span></h2>
+          <span class="sec-line" aria-hidden="true"></span>
+        </div>
+        <div class="identity-grid">
+          <div class="panel reveal">
+            <div class="panel-head mono">ID_CARD<span class="blink">▮</span></div>
+            <div class="id-row"><span class="label mono">本名</span><span class="value">熊昭轶</span></div>
+            <div class="id-row"><span class="label mono">网名</span><span class="value">梦逍遥</span></div>
+            <div class="id-row"><span class="label mono">座右铭</span><span class="value accent">造物，求索，无限进步</span></div>
+            <div class="id-row"><span class="label mono">在读</span><span class="value">云南大学 · 本科</span></div>
+            <div class="id-row"><span class="label mono">主线</span><span class="value">非计算机专业 × AI 深度探索</span></div>
+            <div class="id-row"><span class="label mono">爱好</span><span class="value">看书 · 研究 AI</span></div>
+            <div class="id-row"><span class="label mono">状态</span><span class="value accent">持续迭代中</span></div>
+          </div>
+          <div class="identity-text reveal" style="--d:.12s">
+            <p class="lead">熊昭轶，网名<span class="hl">「梦逍遥」</span>。</p>
+            <p>座右铭是<span class="hl">造物，求索，无限进步</span>。爱好看书与研究 AI，当前就读于云南大学本科，正在把非计算机专业背景与 AI 深度应用结合成自己的独特能力。</p>
+            <div class="tags">
+              <span class="tag">看书</span>
+              <span class="tag">研究 AI</span>
+              <span class="tag">云南大学</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 征途日志 -->
+    <section class="section" id="quest">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="sec-index mono">02</span>
+          <h2 class="sec-title">QUEST<span class="zh">征途日志</span></h2>
+          <span class="sec-line" aria-hidden="true"></span>
+        </div>
+        <ol class="timeline">
+          <li class="tl-item reveal">
+            <span class="tl-phase mono">PHASE 01 · 高中开局</span>
+            <h3>全班倒数第 10</h3>
+            <p>没有漂亮的开局。从全班倒数第 10 起步，承认差距，把每一天拆碎，一点点追回来。</p>
+          </li>
+          <li class="tl-item reveal">
+            <span class="tl-phase mono">PHASE 02 · 一年逆袭</span>
+            <h3>全班第二 · 年级前三十</h3>
+            <p>一年内从全班倒数第 10 进步到全班第二、年级前三十。拥有数学竞赛经历，高考物理 <span class="hl">95+</span>。</p>
+          </li>
+          <li class="tl-item reveal">
+            <span class="tl-phase mono">PHASE 03 · 高升大暑假</span>
+            <h3>深入探索 AI</h3>
+            <p>用整个暑假系统研究 AI：熟练使用 WorkBuddy、Trae、Codex 等 Agent，开始把想法变成能运行的项目。</p>
+          </li>
+          <li class="tl-item reveal">
+            <span class="tl-phase mono">PHASE 04 · 大学远征</span>
+            <h3>云南大学本科在读</h3>
+            <p>以非计算机专业学生的身份继续造物，立志成为<span class="hl">非计算机类专业最会用 AI 的学生</span>。</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 03 能力系统 -->
+    <section class="section" id="system">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="sec-index mono">03</span>
+          <h2 class="sec-title">SYSTEM<span class="zh">能力系统</span></h2>
+          <span class="sec-line" aria-hidden="true"></span>
+        </div>
+        <div class="system-grid">
+          <div class="panel panel-icon reveal">
+            <div class="panel-glyph">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="11" rx="1"/><path d="M8 19h8M12 15v4"/><circle cx="8" cy="9.5" r=".8"/><circle cx="12" cy="9.5" r=".8"/><circle cx="16" cy="9.5" r=".8"/></svg>
+            </div>
+            <h3>Agent 驾驶员</h3>
+            <p class="en mono">AGENT_DRIVER</p>
+            <p>熟练使用 WorkBuddy、Trae、Codex 等 AI Agent，把人工智能变成自己的造物流水线。</p>
+          </div>
+          <div class="panel panel-icon reveal" style="--d:.1s">
+            <div class="panel-glyph">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="14" height="14" rx="2"/><path d="M17 8h4v11a2 2 0 0 1-2 2H8v-4"/><circle cx="10" cy="10" r="2"/></svg>
+            </div>
+            <h3>UI 图设计</h3>
+            <p class="en mono">UI_ARCHITECT</p>
+            <p>掌握 UI 图设计，从视觉稿、界面规范到可落地页面，覆盖完整设计链路。</p>
+          </div>
+          <div class="panel panel-icon reveal" style="--d:.2s">
+            <div class="panel-glyph">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 9l-4 3 4 3M16 9l4 3-4 3M14 5l-4 14"/></svg>
+            </div>
+            <h3>全栈网站</h3>
+            <p class="en mono">FULLSTACK_BUILDER</p>
+            <p>打造全栈网站，前端界面、后端逻辑、数据存储都能独立交付。</p>
+          </div>
+          <div class="panel panel-icon reveal" style="--d:.3s">
+            <div class="panel-glyph">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M4 19h16"/></svg>
+            </div>
+            <h3>本地交付</h3>
+            <p class="en mono">SHIPPER</p>
+            <p>掌握电脑 exe 文件下载与打包交付，把工具做成开箱即用的本地应用。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 项目档案 -->
+    <section class="section" id="archive">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="sec-index mono">04</span>
+          <h2 class="sec-title">ARCHIVE<span class="zh">项目档案</span></h2>
+          <span class="sec-line" aria-hidden="true"></span>
+        </div>
+        <div class="archive-grid">
+          <a class="archive-card reveal" href="https://github.com/xy7-M" target="_blank" rel="noopener">
+            <div class="archive-head mono">PROJECT_01</div>
+            <div class="archive-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M19.1 4.9l-2.8 2.8M7.7 16.3l-2.8 2.8"/></svg>
+            </div>
+            <h3>乔布斯艺术</h3>
+            <p class="en mono">JOBS ART</p>
+            <p>把乔布斯的审美与产品思维做成可调用、可复用的创作系统。</p>
+            <span class="card-link mono">VIEW_ARCHIVE →</span>
+          </a>
+          <a class="archive-card reveal" style="--d:.1s" href="https://github.com/xy7-M" target="_blank" rel="noopener">
+            <div class="archive-head mono">PROJECT_02</div>
+            <div class="archive-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M8 3v4M16 3v4M8 13h8M8 17h5"/></svg>
+            </div>
+            <h3>To-Do List 待办清单</h3>
+            <p class="en mono">TODO_LIST</p>
+            <p>以清单为载体，把目标、执行与复盘压缩成随时可用的效率工具。</p>
+            <span class="card-link mono">VIEW_ARCHIVE →</span>
+          </a>
+          <a class="archive-card reveal" style="--d:.2s" href="https://github.com/xy7-M" target="_blank" rel="noopener">
+            <div class="archive-head mono">PROJECT_03</div>
+            <div class="archive-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="M16 10h5l1 4v4h-6"/><circle cx="8" cy="12" r="1"/><circle cx="12" cy="12" r="1"/></svg>
+            </div>
+            <h3>全英视频的摘录</h3>
+            <p class="en mono">EN_VIDEO_NOTES</p>
+            <p>把全英文视频内容摘成结构化笔记，让优质信息可以被检索和复用。</p>
+            <span class="card-link mono">VIEW_ARCHIVE →</span>
+          </a>
+          <div class="archive-card archive-more reveal" style="--d:.3s">
+            <div class="archive-head mono">PROJECT_∞</div>
+            <h3>GitHub 持续发布</h3>
+            <p class="en mono">@xy7-M</p>
+            <p>多个项目已在 GitHub 发布，持续迭代，无限进步。</p>
+            <a class="btn btn-ghost" href="https://github.com/xy7-M" target="_blank" rel="noopener">OPEN GITHUB</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 数据面板 -->
+    <section class="section" id="goal">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="sec-index mono">05</span>
+          <h2 class="sec-title">GOAL<span class="zh">志向内核</span></h2>
+          <span class="sec-line" aria-hidden="true"></span>
+        </div>
+        <div class="goal-quote reveal">
+          <p class="goal-big glitch-soft" data-text="非计算机类专业最会用 AI 的学生">非计算机类专业<br>最会用 AI 的学生</p>
+          <p class="goal-zh">立志成为</p>
+        </div>
+        <div class="pillars">
+          <div class="pillar reveal">
+            <span class="pillar-code mono">A</span>
+            <h3>造物</h3>
+            <p class="en mono">CREATE</p>
+            <p>把想法变成能运行、能交付、能被使用的作品。</p>
+          </div>
+          <div class="pillar reveal" style="--d:.12s">
+            <span class="pillar-code mono">B</span>
+            <h3>求索</h3>
+            <p class="en mono">EXPLORE</p>
+            <p>带着问题读书、研究 AI、不断追问边界。</p>
+          </div>
+          <div class="pillar reveal" style="--d:.24s">
+            <span class="pillar-code mono">C</span>
+            <h3>无限进步</h3>
+            <p class="en mono">IMPROVE</p>
+            <p>没有终点版本，只要持续迭代，就一直在变强。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p class="footer-sign">造物 · 求索 · 无限进步</p>
+    <p class="mono footer-meta">© 2026 熊昭轶 · 梦逍遥 · 云南大学</p>
+    <p class="mono footer-end">END_OF_PROFILE ▮</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
+
