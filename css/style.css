@@ -1253,14 +1253,6 @@ body {
   color: var(--dim);
   font-size: 11px;
   letter-spacing: 3px;
-  margin-bottom: 8px;
-}
-
-.footer-end {
-  color: var(--pink);
-  font-size: 10px;
-  letter-spacing: 3px;
-  opacity: .75;
 }
 
 /* ---------- 滚动入场 ---------- */
