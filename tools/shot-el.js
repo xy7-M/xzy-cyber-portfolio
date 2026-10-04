@@ -16,6 +16,7 @@ const selector = process.argv[2] || '#goal';
 const out = process.argv[3] || path.join(__dirname, 'shot-el.png');
 const VW = Number(process.argv[4]) || 1440;
 const VH = Number(process.argv[5]) || 900;
+const PRE_JS = process.argv[6] || '';
 const PORT = 9333;
 
 function getJson(p) {
@@ -71,6 +72,12 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   }
   if (!ready) throw new Error('页面未就绪，找不到元素 ' + selector);
   await sleep(600);
+
+  // 可选：截图前先执行一段 JS（如点击按钮展开菜单）
+  if (PRE_JS) {
+    await send('Runtime.evaluate', { expression: PRE_JS });
+    await sleep(700);
+  }
 
   // 强制显示所有 reveal，并滚到目标元素原点
   await send('Runtime.evaluate', {

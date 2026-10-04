@@ -1289,18 +1289,21 @@ body {
     top: 0;
     right: 0;
     height: 100vh;
-    width: min(320px, 82vw);
-    background: rgba(5, 8, 18, .97);
-    border-left: 1px solid var(--line);
+    width: min(300px, 78vw);
+    background: #050812;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 32px;
+    gap: 20px;
     transform: translateX(100%);
     transition: .4s;
   }
 
-  .nav-links.open { transform: none; }
+  .nav-links.open {
+    transform: none;
+    box-shadow: 0 0 0 100vw rgba(4, 6, 13, .78);
+  }
+  .nav-links a { font-size: 16px; letter-spacing: 2px; }
   .nav-toggle { display: block; z-index: 101; }
   .hero-meta { gap: 10px; }
   .hero-hud { display: none; }
