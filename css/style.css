@@ -1352,6 +1352,13 @@ body {
 }
 
 /* ---------- 减少动效 ---------- */
+/* ---------- 移动端：不显示矩阵雨 ----------
+   与 js/main.js 的 rainMobileMQ 判断保持一致；
+   JS 侧负责不启动动画（省电），这里负责视觉兜底。 */
+@media (max-width: 768px), (pointer: coarse) {
+  #matrix { display: none; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

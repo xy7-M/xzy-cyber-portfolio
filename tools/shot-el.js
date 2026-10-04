@@ -1,6 +1,8 @@
-/* 精确区域截图：以正常视口 (1440x900) 打开页面，滚动到指定元素后再截图，
+/* 精确区域截图：以正常视口打开页面，滚动到指定元素后再截图，
    避免 vh 单位被超高视口破坏。
-   用法：node tools/shot-el.js <选择器> <输出png>
+   用法：node tools/shot-el.js <选择器> <输出png> [视口宽] [视口高]
+   例：  node tools/shot-el.js "#goal" out.png          → 1440x900
+         node tools/shot-el.js "body" mobile.png 390 844 → 手机视口
    依赖：Chrome headless + CDP（无需 puppeteer） */
 const { spawn } = require('child_process');
 const http = require('http');
@@ -12,6 +14,8 @@ const fileUrl = 'file:///' + path.join(__dirname, '.shot-preview.html').replace(
 
 const selector = process.argv[2] || '#goal';
 const out = process.argv[3] || path.join(__dirname, 'shot-el.png');
+const VW = Number(process.argv[4]) || 1440;
+const VH = Number(process.argv[5]) || 900;
 const PORT = 9333;
 
 function getJson(p) {
@@ -27,7 +31,7 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 (async () => {
   const chrome = spawn(CHROME, [
     '--headless=new', '--disable-gpu', '--hide-scrollbars', '--no-first-run',
-    '--window-size=1440,900', '--remote-debugging-port=' + PORT,
+    '--window-size=' + VW + ',' + VH, '--remote-debugging-port=' + PORT,
     '--user-data-dir=' + path.join(__dirname, '.chrome-profile'),
     'about:blank',
   ], { stdio: 'ignore' });

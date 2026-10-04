@@ -18,6 +18,10 @@
   /* ---------- 矩阵雨：只落两侧页边，中央让位粒子云 ---------- */
   /* 全局慢速系数 0.5：与粒子云自转（angle += dt * 0.0000825）同频
      —— 粒子云约 76s 转一整圈，矩阵雨每格约 1.6s 落一格，两者节奏一致 */
+  /* 移动端（窄屏 ≤768px 或触摸设备）不启动矩阵雨：
+     屏幕小、字符密，观感噪杂且耗电；电脑端保留。
+     用 matchMedia 监听，跨越阈值时动态启停（如手机横竖屏切换、桌面拖拽窗口）。 */
+  const rainMobileMQ = window.matchMedia('(max-width: 768px), (pointer: coarse)');
   const RAIN_SPEED = 0.05;
   const canvas = document.getElementById('matrix');
   if (canvas) {
@@ -29,6 +33,7 @@
     let drops = [];
     let margin = 0;
     let maskOn = false;
+    let raf = 0; // 当前动画帧句柄，0 表示未运行
 
     function updateMargin() {
       // 正文列宽与 .container 一致：min(1180px, 92%)；两侧页边归数码雨
@@ -92,19 +97,50 @@
         }
       });
 
-      requestAnimationFrame(draw);
+      raf = requestAnimationFrame(draw);
+    }
+
+    function startRain() {
+      if (raf || reduced || rainMobileMQ.matches) return;
+      ctx.fillStyle = 'rgba(4, 6, 13, 1)';
+      ctx.fillRect(0, 0, width, height);
+      raf = requestAnimationFrame(draw);
+    }
+
+    function stopRain() {
+      if (raf) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+      }
+      ctx.clearRect(0, 0, width, height); // 清空画布，避免留下静止的字符残影
     }
 
     resize();
     window.addEventListener('resize', resize);
-    if (!reduced) {
-      // 字体落地后清一次画布：早期字形不会留在尾迹中
-      fontsReady.then(function () {
-        ctx.fillStyle = 'rgba(4, 6, 13, 1)';
-        ctx.fillRect(0, 0, width, height);
-      });
-      requestAnimationFrame(draw);
+
+    // 字体落地后清一次画布：早期字形不会留在尾迹中
+    fontsReady.then(function () {
+      if (!raf) return;
+      ctx.fillStyle = 'rgba(4, 6, 13, 1)';
+      ctx.fillRect(0, 0, width, height);
+    });
+
+    // 跨越移动端/桌面阈值时动态启停
+    const onRainBreakpoint = function (e) {
+      if (e.matches) {
+        stopRain();
+      } else {
+        resize(); // 从窄屏回到宽屏：重建字符网格再开跑
+        startRain();
+      }
+    };
+    if (rainMobileMQ.addEventListener) {
+      rainMobileMQ.addEventListener('change', onRainBreakpoint);
+    } else {
+      rainMobileMQ.addListener(onRainBreakpoint); // 旧版 Safari 回退
     }
+
+    startRain();
   }
 
   /* ---------- 中央球形流动粒子云 ----------
