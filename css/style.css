@@ -1292,8 +1292,9 @@ body {
     width: min(300px, 78vw);
     background: #050812;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
+    padding-top: clamp(112px, 16vh, 150px);
     gap: 20px;
     transform: translateX(100%);
     transition: .4s;
@@ -1303,7 +1304,26 @@ body {
     transform: none;
     box-shadow: 0 0 0 100vw rgba(4, 6, 13, .78);
   }
-  .nav-links a { font-size: 16px; letter-spacing: 2px; }
+  /* 菜单项：金属银白质感（与座右铭条同一套渐变 + 拉丝高光） */
+  .nav-links a {
+    font-size: 16px;
+    letter-spacing: 2px;
+    font-weight: 700;
+    background: linear-gradient(100deg,
+      #5f6773 0%, #b9c0c9 18%, #ffffff 34%, #eef1f5 44%,
+      #7f8792 58%, #ccd2d9 78%, #6b737f 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 1px 0 rgba(255, 255, 255, .20))
+            drop-shadow(0 3px 10px rgba(0, 0, 0, .50));
+  }
+
+  .nav-links a:hover {
+    border-bottom-color: transparent;
+    filter: drop-shadow(0 1px 0 rgba(255, 255, 255, .32))
+            drop-shadow(0 0 14px rgba(210, 226, 255, .45));
+  }
   .nav-toggle { display: block; z-index: 101; }
   .hero-meta { gap: 10px; }
   .hero-hud { display: none; }
