@@ -1229,83 +1229,6 @@ body {
   font-size: 14px;
 }
 
-/* ---------- 06 专属字体：梦逍遥（手写 SVG 艺术字，不依赖系统字体） ---------- */
-.lockup {
-  position: relative;
-  padding: 40px 0 34px;
-  background: radial-gradient(120% 90% at 50% 40%, rgba(0, 229, 255, .05), transparent 62%);
-}
-.lockup::before,
-.lockup::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--line) 18%, var(--line) 82%, transparent);
-}
-.lockup::before { top: 0; }
-.lockup::after { bottom: 0; }
-
-/* 背景点阵：既呼应参考图的背景格点，也给手写字加一层工业网格 */
-.lockup-grid {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(0, 229, 255, .10) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 229, 255, .10) 1px, transparent 1px);
-  background-size: 44px 44px;
-  mask-image: radial-gradient(90% 80% at 50% 50%, #000 12%, transparent 76%);
-  -webkit-mask-image: radial-gradient(90% 80% at 50% 50%, #000 12%, transparent 76%);
-  opacity: .5;
-  pointer-events: none;
-}
-
-.lockup-art {
-  position: relative;
-  width: min(100%, 720px); /* 参考图比例：整体宽约为单字高的 2.9 倍 */
-  margin: 0 auto;
-}
-.lockup-svg { width: 100%; height: auto; display: block; }
-
-/* 霓虹：渐变填色保证紫粉调「全饱和」；恒宽白边负责参考图那种灯管亮边，
-   同时把穿插在一起的相邻笔画分开，避免两字糊成一团。
-   注意 stroke-width 是用户单位，会随字号缩放 —— 改 font-size 时需同步复核。 */
-.mxy-glow { filter: drop-shadow(0 0 20px rgba(0, 229, 255, .40)) drop-shadow(0 0 48px rgba(237, 70, 172, .26)); }
-
-.mxy-ink {
-  stroke: #fff;
-  stroke-width: 2.2;
-  stroke-linejoin: round;
-  stroke-linecap: round;
-  paint-order: stroke fill;
-}
-
-/* 仅屏幕阅读器可见：SVG 是纯装饰曲线，语义交给 aria-label */
-.lockup-cap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 11px;
-  margin-top: 26px;
-  color: var(--dim);
-  font-size: 10px;
-  letter-spacing: 3px;
-  text-align: center;
-  flex-wrap: wrap;
-}
-.lockup-cap .sep { color: var(--cyan); opacity: .6; }
-
-.lockup-sig {
-  text-align: center;
-  margin-top: 13px;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 5px;
-  color: var(--cyan);
-  opacity: .55;
-}
-
 /* ---------- 页脚 ---------- */
 .footer {
   position: relative;
@@ -1426,8 +1349,6 @@ body {
   }
 
   .sec-line { display: none; }
-  .lockup-art { width: 100%; }
-  .lockup-cap { letter-spacing: 2px; }
 }
 
 /* ---------- 减少动效 ---------- */

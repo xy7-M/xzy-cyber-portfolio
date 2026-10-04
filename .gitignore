@@ -1,7 +1,9 @@
 app/dist/
 app/node_modules/
 tools/*.png
+.shot-preview.html
 tools/.chrome-profile/
 tools/iso*.png
 tools/lockup-*.png
 tools/zoom*.png
+.workbuddy-ai/

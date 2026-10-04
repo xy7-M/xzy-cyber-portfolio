@@ -207,39 +207,6 @@
     if (!reduced) requestAnimationFrame(loopCloud);
   }
 
-  /* ---------- 专属字体「梦逍遥」：把字形数据渲染成霓虹 SVG ----------
-     单层结构：路径本身填「逐字三段渐变」（颜色全饱和、不被任何白芯冲淡），
-               再描一圈恒定宽度的白边 —— 既是参考图的亮边，也把相邻笔画分开。
-     排布：每字一格 144 单位（字身 148~163 宽），靠 viewBox 的负起点 + 余宽
-           形成 5~15 单位的穿插咬合，三字像被一笔带过而非三个方砖。
-     纪律：每字只能有「一个」path，否则渐变会按 path 数量平分取色、整体被撕裂。 */
-  var glyphHost = document.querySelector('[data-glyph-lockup]');
-  if (glyphHost && window.MXY_GLYPHS) {
-    var XL = 144;
-    var VB = { x: -14, y: -14, w: XL * 3 + 28, h: 272 };
-
-    var strokes = window.MXY_GLYPHS.map(function (g, i) {
-      return '<g transform="translate(' + (i * XL) + ',0)">' +
-        '<path class="mxy-ink" fill="url(#mxyInk' + i + ')" d="' + g.paths.join(' ') + '"/>' +
-      '</g>';
-    }).join('');
-
-    var defs = '<defs>' + window.MXY_GLYPHS.map(function (g, i) {
-      return '<linearGradient id="mxyInk' + i + '" x1="0" y1="0" x2="0" y2="1">' +
-        '<stop offset="0%" stop-color="' + g.from + '"/>' +
-        '<stop offset="46%" stop-color="' + g.mid + '"/>' +
-        '<stop offset="100%" stop-color="' + g.to + '"/>' +
-        '</linearGradient>';
-    }).join('') + '</defs>';
-
-    glyphHost.innerHTML = '' +
-      '<svg class="lockup-svg" viewBox="' + VB.x + ' ' + VB.y + ' ' + VB.w + ' ' + VB.h + '" ' +
-        'role="img" aria-label="梦逍遥 专属艺术字体" xmlns="http://www.w3.org/2000/svg">' +
-        defs +
-        '<g class="mxy-glow">' + strokes + '</g>' +
-      '</svg>';
-  }
-
   /* ---------- 背景音乐 ----------
      it's 6pm but I miss u already. · 循环播放 · 音量 0.6（系统声音的 60%）
      浏览器禁止无交互自动播放：先静音尝试，失败则等首次交互再放 */

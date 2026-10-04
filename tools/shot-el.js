@@ -8,8 +8,7 @@ const path = require('path');
 const fs = require('fs');
 
 const CHROME = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
-const root = path.join(__dirname, '..');
-const fileUrl = 'file:///' + path.join(root, '.shot-preview.html').replace(/\\/g, '/').replace(/ /g, '%20');
+const fileUrl = 'file:///' + path.join(__dirname, '.shot-preview.html').replace(/\\/g, '/').replace(/ /g, '%20');
 
 const selector = process.argv[2] || '#goal';
 const out = process.argv[3] || path.join(__dirname, 'shot-el.png');

@@ -21,6 +21,7 @@ const patch = `
 </script>
 `;
 
+html = html.replace('<head>', '<head>\n<base href="../">');
 html = html.replace('</head>', patch + '</head>');
 fs.writeFileSync(path.join(__dirname, '.shot-preview.html'), html, 'utf8');
 console.log('wrote tools/.shot-preview.html');
