@@ -1,0 +1,16 @@
+.lanyard-wrapper {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+/* R3F measures this element with a ResizeObserver and then writes pixel
+   sizes onto the canvas. Using `inset: 0` instead of `height: 100%` keeps
+   the wrapper from collapsing when the percentage chain is ambiguous. */
+.lanyard-wrapper canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  /* let vertical swipes scroll the page instead of being eaten by the canvas */
+  touch-action: pan-y;
+}

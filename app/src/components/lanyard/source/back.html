@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face{
+  font-family:'GeistMono';
+  src:url(data:font/woff2;base64,__GEIST_B64__) format('woff2');
+  font-weight:100 900;font-style:normal;font-display:block;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:900px;height:1256px;background:#050a12;overflow:hidden;}
+#target{
+  position:relative;width:900px;height:1256px;overflow:hidden;
+  background:radial-gradient(120% 78% at 50% 0%, #17253f 0%, #101b2e 44%, #0a1120 100%);
+  font-family:'GeistMono','Microsoft YaHei UI','Microsoft YaHei',monospace;
+  -webkit-font-smoothing:antialiased;
+}
+.grid{position:absolute;inset:0;
+  background:
+    linear-gradient(rgba(0,229,255,.055) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,229,255,.055) 1px,transparent 1px);
+  background-size:44px 44px;
+  -webkit-mask-image:radial-gradient(ellipse 76% 66% at 50% 40%,#000 30%,transparent 82%);
+  mask-image:radial-gradient(ellipse 76% 66% at 50% 40%,#000 30%,transparent 82%);}
+.scan{position:absolute;inset:0;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.30) 0 1px,transparent 1px 3px);
+  opacity:.55;}
+.vig{position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 40%,transparent 46%,rgba(0,0,0,.62) 100%);}
+.frame{position:absolute;inset:0;border:3px solid rgba(0,229,255,.55);
+  box-shadow:inset 0 0 72px rgba(0,229,255,.20), inset 0 0 3px rgba(0,229,255,.5);}
+.br{position:absolute;width:58px;height:58px;border:5px solid #00e5ff;
+  box-shadow:0 0 22px rgba(0,229,255,.8);}
+.br.tl{top:22px;left:22px;border-right:0;border-bottom:0;}
+.br.tr{top:22px;right:22px;border-left:0;border-bottom:0;}
+.br.bl{bottom:22px;left:22px;border-right:0;border-top:0;}
+.br.br2{bottom:22px;right:22px;border-left:0;border-top:0;}
+
+/* ---- header ---- */
+.head{position:absolute;top:90px;left:92px;right:92px;
+  display:flex;align-items:baseline;gap:26px;}
+.head .no{font-size:29px;letter-spacing:4px;color:#a855f7;
+  text-shadow:0 0 10px rgba(168,85,247,.55);}
+.head .tt{font-size:38px;letter-spacing:11px;color:#dbe7ff;
+  text-shadow:0 0 16px rgba(0,229,255,.34);}
+.head .ln{flex:1;height:1px;align-self:center;
+  background:linear-gradient(90deg,rgba(0,229,255,.55),rgba(0,229,255,0));}
+
+/* ---- work rows ---- */
+.works{position:absolute;top:196px;left:92px;right:92px;}
+.w{border-top:1px solid rgba(0,229,255,.16);padding:30px 0 0;}
+.w:last-child{border-bottom:1px solid rgba(0,229,255,.16);padding-bottom:32px;}
+.wtop{display:flex;align-items:baseline;gap:24px;}
+.wtop .n{flex:0 0 80px;font-size:24px;letter-spacing:3px;color:#4a5878;}
+.wtop .t{font-size:40px;font-weight:400;letter-spacing:3px;color:#dbe7ff;}
+.wbot{margin-top:14px;padding-left:104px;display:flex;align-items:baseline;gap:18px;}
+.wbot .c{font-size:23px;letter-spacing:3px;color:#8fa0c9;}
+.wbot .d{font-size:20px;color:#4a5878;}
+.wbot .y{font-size:23px;letter-spacing:3px;color:#a855f7;}
+
+/* ---- colophon ---- */
+.colo{position:absolute;bottom:96px;left:92px;right:92px;text-align:center;}
+.colo .rule{width:230px;height:1px;margin:0 auto 30px;
+  background:linear-gradient(90deg,transparent,#00e5ff,transparent);
+  box-shadow:0 0 12px #00e5ff;}
+.colo .sig{font-size:34px;font-weight:600;letter-spacing:10px;color:#ffffff;
+  text-shadow:0 0 22px rgba(0,229,255,.34);}
+.colo .meta{margin-top:20px;font-size:22px;letter-spacing:5px;color:#4a5878;}
+
+.count{position:absolute;bottom:250px;left:92px;right:92px;
+  display:flex;align-items:center;gap:20px;
+  font-size:22px;letter-spacing:5px;color:rgba(0,229,255,.55);}
+.count .cl{flex:1;height:1px;background:linear-gradient(90deg,
+  rgba(0,229,255,.34),rgba(0,229,255,0));}
+</style></head>
+<body>
+<div id="target">
+  <div class="grid"></div>
+
+  <div class="head">
+    <span class="no">02</span>
+    <span class="tt">SELECTED WORKS</span>
+    <span class="ln"></span>
+  </div>
+
+  <div class="works">
+    <div class="w">
+      <div class="wtop"><span class="n">01</span><span class="t">WHO AM I</span></div>
+      <div class="wbot"><span class="c">影像 · 视觉</span><span class="d">/</span><span class="y">2026</span></div>
+    </div>
+    <div class="w">
+      <div class="wtop"><span class="n">02</span><span class="t">SUPER NOVA GOOSE</span></div>
+      <div class="wbot"><span class="c">超新鹅 · 品牌标识</span><span class="d">/</span><span class="y">2026</span></div>
+    </div>
+    <div class="w">
+      <div class="wtop"><span class="n">03</span><span class="t">VIDEO TRANSLATE STUDIO</span></div>
+      <div class="wbot"><span class="c">产品 · 桌面应用</span><span class="d">/</span><span class="y">2026</span></div>
+    </div>
+    <div class="w">
+      <div class="wtop"><span class="n">04</span><span class="t">SECOND BRAIN</span></div>
+      <div class="wbot"><span class="c">知识系统</span><span class="d">/</span><span class="y">2026</span></div>
+    </div>
+    <div class="w">
+      <div class="wtop"><span class="n">05</span><span class="t">MENGXIAOYAO</span></div>
+      <div class="wbot"><span class="c">品牌 · 视觉</span><span class="d">/</span><span class="y">2026</span></div>
+    </div>
+  </div>
+
+  <div class="count"><span>TOTAL · 05</span><span class="cl"></span><span>SYS OK</span></div>
+
+  <div class="colo">
+    <div class="rule"></div>
+    <div class="sig">梦逍遥</div>
+    <div class="meta">XY--M · 造物 · 求索 · 无限进步</div>
+  </div>
+
+  <div class="scan"></div>
+  <div class="vig"></div>
+  <div class="frame"></div>
+  <div class="br tl"></div><div class="br tr"></div>
+  <div class="br bl"></div><div class="br br2"></div>
+</div>
+</body></html>

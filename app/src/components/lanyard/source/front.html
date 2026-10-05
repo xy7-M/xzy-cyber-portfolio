@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face{
+  font-family:'GeistMono';
+  src:url(data:font/woff2;base64,__GEIST_B64__) format('woff2');
+  font-weight:100 900;font-style:normal;font-display:block;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:900px;height:1256px;background:#050a12;overflow:hidden;}
+#target{
+  position:relative;width:900px;height:1256px;overflow:hidden;
+  background:
+    radial-gradient(120% 78% at 50% 0%, #17253f 0%, #101b2e 44%, #0a1120 100%);
+  font-family:'GeistMono','Microsoft YaHei UI','Microsoft YaHei',monospace;
+  -webkit-font-smoothing:antialiased;
+}
+/* ---- cyan grid ---- */
+.grid{
+  position:absolute;inset:0;
+  background:
+    linear-gradient(rgba(0,229,255,.055) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,229,255,.055) 1px,transparent 1px);
+  background-size:44px 44px;
+  -webkit-mask-image:radial-gradient(ellipse 76% 66% at 50% 34%,#000 30%,transparent 82%);
+  mask-image:radial-gradient(ellipse 76% 66% at 50% 34%,#000 30%,transparent 82%);
+}
+/* ---- scanlines ---- */
+.scan{
+  position:absolute;inset:0;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.30) 0 1px,transparent 1px 3px);
+  opacity:.55;
+}
+/* ---- vignette ---- */
+.vig{
+  position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 34%,transparent 46%,rgba(0,0,0,.62) 100%);
+}
+/* ---- frame + brackets ---- */
+.frame{position:absolute;inset:0;border:3px solid rgba(0,229,255,.55);
+  box-shadow:inset 0 0 72px rgba(0,229,255,.20), inset 0 0 3px rgba(0,229,255,.5);}
+.br{position:absolute;width:58px;height:58px;border:5px solid #00e5ff;
+  box-shadow:0 0 22px rgba(0,229,255,.8);}
+.br.tl{top:22px;left:22px;border-right:0;border-bottom:0;}
+.br.tr{top:22px;right:22px;border-left:0;border-bottom:0;}
+.br.bl{bottom:22px;left:22px;border-right:0;border-top:0;}
+.br.br2{bottom:22px;right:22px;border-left:0;border-top:0;}
+
+.wrap{position:absolute;left:92px;right:92px;}
+
+/* ---- header ---- */
+.hd{top:88px;display:flex;justify-content:space-between;align-items:center;}
+.hd .l{font-size:30px;letter-spacing:6px;color:#00e5ff;
+  text-shadow:0 0 12px rgba(0,229,255,.65);font-weight:500;}
+.hd .r{font-size:27px;letter-spacing:5px;color:#38f2a1;
+  text-shadow:0 0 12px rgba(56,242,161,.6);display:flex;align-items:center;gap:12px;}
+.dot{width:14px;height:14px;border-radius:50%;background:#38f2a1;
+  box-shadow:0 0 14px #38f2a1;}
+.rule{position:absolute;height:1px;background:linear-gradient(90deg,
+  rgba(0,229,255,.62),rgba(0,229,255,.10));}
+
+/* ---- emblem ---- */
+.emblem{position:absolute;top:196px;left:92px;width:158px;height:158px;}
+
+/* ---- title ---- */
+.title{position:absolute;top:398px;left:92px;
+  font-size:120px;font-weight:700;line-height:1;letter-spacing:9px;
+  color:#ffffff;text-shadow:0 0 34px rgba(0,229,255,.42);}
+.title i{position:absolute;left:0;top:0;font-style:normal;
+  mix-blend-mode:screen;pointer-events:none;}
+.title i.c{color:#00e5ff;transform:translate(-3px,0);opacity:.62;}
+.title i.m{color:#ff2a6d;transform:translate(3px,0);opacity:.52;}
+
+.trule{position:absolute;top:562px;left:92px;width:152px;height:3px;
+  background:#00e5ff;box-shadow:0 0 16px #00e5ff;}
+
+/* ---- name ---- */
+.name{position:absolute;top:600px;left:92px;font-size:88px;font-weight:600;
+  letter-spacing:10px;color:#ffffff;text-shadow:0 0 26px rgba(0,229,255,.34);}
+.sub{position:absolute;top:726px;left:92px;font-size:29px;letter-spacing:4px;
+  color:#8fa0c9;}
+
+/* ---- data rows ---- */
+.rows{position:absolute;top:824px;left:92px;right:92px;
+  display:flex;flex-direction:column;gap:0;}
+.row{display:flex;align-items:baseline;gap:24px;height:92px;}
+.row .k{width:164px;flex:0 0 164px;font-size:27px;letter-spacing:4px;color:#a855f7;
+  text-shadow:0 0 10px rgba(168,85,247,.5);}
+.row .v{font-size:31px;letter-spacing:1px;color:#dbe7ff;white-space:nowrap;}
+
+/* ---- footer / barcode ---- */
+.bars{position:absolute;top:1148px;left:92px;display:flex;align-items:flex-end;
+  gap:7px;height:58px;}
+.bars span{display:block;background:#00e5ff;box-shadow:0 0 8px rgba(0,229,255,.6);}
+.idc{position:absolute;top:1152px;right:92px;text-align:right;}
+.idc .a{font-size:27px;letter-spacing:4px;color:#dbe7ff;}
+.idc .b{font-size:21px;letter-spacing:3px;color:#4a5878;margin-top:10px;}
+
+/* ---- right vertical rail ---- */
+.rail{position:absolute;right:40px;top:398px;font-size:20px;letter-spacing:7px;
+  color:rgba(0,229,255,.45);writing-mode:vertical-rl;}
+</style></head>
+<body>
+<div id="target">
+  <div class="grid"></div>
+
+  <div class="wrap hd">
+    <div class="l">MENGXIAOYAO · 梦逍遥</div>
+    <div class="r"><span class="dot"></span>ONLINE</div>
+  </div>
+  <div class="rule" style="top:148px;left:92px;right:92px;"></div>
+
+  <svg class="emblem" viewBox="0 0 64 64" fill="none">
+    <circle cx="32" cy="32" r="23" stroke="#00e5ff" stroke-width="2.4"/>
+    <circle cx="32" cy="32" r="29" stroke="rgba(0,229,255,.28)" stroke-width="1"/>
+    <path d="M32 13 L32 51" stroke="#00e5ff" stroke-width="2.4"/>
+    <path d="M19 27 L32 13 L45 27" stroke="#ff2a6d" stroke-width="2.4" stroke-linecap="square"/>
+    <path d="M25 41 L39 41" stroke="rgba(0,229,255,.55)" stroke-width="2"/>
+  </svg>
+
+  <div class="title">WHO AM I<i class="c">WHO AM I</i><i class="m">WHO AM I</i></div>
+  <div class="trule"></div>
+
+  <div class="name">熊昭轶</div>
+  <div class="sub">FELIX · 云南大学 · 本科在读</div>
+
+  <div class="rows">
+    <div class="row"><span class="k">EDU</span><span class="v">云南大学 · 本科在读</span></div>
+    <div class="row"><span class="k">MOTTO</span><span class="v">造物，求索，无限进步</span></div>
+    <div class="row"><span class="k">MISSION</span><span class="v">非计算机专业最会用 AI 的学生</span></div>
+  </div>
+
+  <div class="bars">
+    <span style="width:4px;height:58px"></span>
+    <span style="width:9px;height:58px"></span>
+    <span style="width:3px;height:58px"></span>
+    <span style="width:6px;height:58px"></span>
+    <span style="width:12px;height:58px"></span>
+    <span style="width:3px;height:58px"></span>
+    <span style="width:7px;height:58px"></span>
+    <span style="width:4px;height:58px"></span>
+    <span style="width:10px;height:58px"></span>
+    <span style="width:3px;height:58px"></span>
+    <span style="width:6px;height:58px"></span>
+    <span style="width:14px;height:58px"></span>
+    <span style="width:4px;height:58px"></span>
+    <span style="width:8px;height:58px"></span>
+    <span style="width:3px;height:58px"></span>
+  </div>
+  <div class="idc">
+    <div class="a">ID · XY-M-2026-0001</div>
+    <div class="b">SYS VER 2.6 / 造物 · 求索</div>
+  </div>
+
+  <div class="rail">CYBER PROFILE · 2026</div>
+
+  <div class="scan"></div>
+  <div class="vig"></div>
+  <div class="frame"></div>
+  <div class="br tl"></div><div class="br tr"></div>
+  <div class="br bl"></div><div class="br br2"></div>
+</div>
+</body></html>

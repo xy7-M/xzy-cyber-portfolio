@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face{
+  font-family:'GeistMono';
+  src:url(data:font/woff2;base64,__GEIST_B64__) format('woff2');
+  font-weight:100 900;font-style:normal;font-display:block;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:1025px;height:250px;background:#04060d;overflow:hidden;}
+#target{
+  position:relative;width:1025px;height:250px;overflow:hidden;background:#04060d;
+  font-family:'GeistMono','Microsoft YaHei UI',monospace;
+}
+/* 织带本体：中间略亮，模拟织物受光 */
+.weave{position:absolute;inset:0;
+  background:linear-gradient(180deg,#03060e 0%,#0a1424 34%,#0e1c30 50%,#0a1424 66%,#03060e 100%);}
+/* 织纹：斜向细密条纹，沿吊带方向延展 */
+.warp{position:absolute;inset:0;
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,.055) 0 2px,transparent 2px 9px);
+  opacity:.85;}
+/* 上下边缘的青色走线 */
+.edge{position:absolute;left:0;right:0;height:26px;background:#00e5ff;
+  box-shadow:0 0 18px rgba(0,229,255,.85);}
+/* 中心竖带（镜像对称，平铺后形成均匀间隔） */
+.core{position:absolute;top:0;bottom:0;left:497px;width:31px;
+  background:linear-gradient(180deg,rgba(0,229,255,0),rgba(0,229,255,.20) 50%,rgba(0,229,255,0));}
+/* 两侧刻度：垂直于吊带方向，镜像对称后形成等距标记。
+   注：吊带在屏幕上只有十几像素宽、且纹理沿吊带长度被压缩，圆形徽记会被
+   压成竖条，因此这里只用「沿长度方向的走线 + 垂直刻度」这类各向异性安全
+   的图形。 */
+.tick{position:absolute;top:50%;width:10px;height:96px;transform:translateY(-50%);
+  background:rgba(0,229,255,.55);box-shadow:0 0 10px rgba(0,229,255,.45);}
+.tick.a{left:288px;} .tick.b{left:727px;}
+/* 中央亮条：沿吊带长度方向的常量 V 特征，不受各向异性拉伸影响，
+   在十几像素宽的吊带上提供稳定的识别度。 */
+.mid{position:absolute;left:0;right:0;top:112px;height:26px;
+  background:rgba(0,229,255,.30);}
+</style></head>
+<body>
+<div id="target">
+  <div class="weave"></div>
+  <div class="warp"></div>
+  <div class="core"></div>
+  <div class="mid"></div>
+  <div class="tick a"></div>
+  <div class="tick b"></div>
+  <div class="edge" style="top:26px"></div>
+  <div class="edge" style="bottom:26px"></div>
+</div>
+</body></html>
