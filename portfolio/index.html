@@ -688,6 +688,24 @@ section{position:relative;z-index:2;}
   color:var(--purple);
 }
 
+/* 外链工作项标记：01 WHO AM I 会跳到独立部署的自我介绍站。
+   注意不能用 .w-title::before / ::after —— 那两个伪元素已被上面的
+   glitch 色散（青/洋红重影）占用，所以箭头用一个独立 span 承载。 */
+.w-go{
+  display:inline-block;
+  margin-left:.5em;
+  font-size:.62em;
+  color:var(--cyan);
+  opacity:.4;
+  transform:translateY(-.16em);
+  transition:opacity .35s ease,transform .35s cubic-bezier(.22,.61,.36,1);
+}
+.work.is-external a:hover .w-go,
+.work.is-external a:focus-visible .w-go{
+  opacity:1;
+  transform:translate(.14em,-.3em);
+}
+
 /* hover: title shifts, chromatic split flickers */
 .work a:hover .w-title,
 .work a:focus-visible .w-title{
@@ -903,10 +921,12 @@ section{position:relative;z-index:2;}
   </header>
 
   <ol class="works">
-    <li class="work reveal">
-      <a href="#works">
+    <li class="work reveal is-external">
+      <!-- 01 WHO AM I → 指向独立部署的旧版自我介绍站（xzy-self-intro）。
+           target=_blank 让作品集页保持不跳走，访客看完可返回。 -->
+      <a href="https://xzy-self-intro.vercel.app/" target="_blank" rel="noopener noreferrer">
         <span class="w-no mono">01</span>
-        <h3 class="w-title" data-text="WHO AM I">WHO AM I</h3>
+        <h3 class="w-title" data-text="WHO AM I">WHO AM I<span class="w-go" aria-hidden="true">↗</span></h3>
         <span class="w-cat">影像 · 视觉</span>
         <span class="w-year mono">2026</span>
       </a>
