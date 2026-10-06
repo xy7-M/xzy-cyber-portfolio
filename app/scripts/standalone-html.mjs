@@ -48,15 +48,34 @@ const sizeKB = (n) => Math.round(n / 1024) + ' KB';
 //   上一轮本脚本已变以 "3D 工牌（自包含内联版）" 注释开头（self-contained）；
 //   两种都识别，找到该注释到 loader 闭合 </script> 之间的整段替换掉。
 const START_RE = /<!-- =+ 3D 工牌(?:按需加载|（自包含内联版）)/;
+// 注意：收尾**不能**简单用 html.indexOf('</script>', sIdx)。
+// 自包含块内部本身就含有多个 </script>：先是 __MXY_BADGE__ 的注入脚本，
+// 再是 text/plain 的 bundle 段。从块首往后找第一个 </script>，命中的是
+// **注入脚本**自己的闭合标签，于是 before 只切到那里、bundle 正文被当作
+// after 原样留下，紧接着又追加一份新的 —— bundle 变成两份、index.html
+// 从 16.9MB 涨到 20MB（2026-10-06 实测踩到）。
+//
+// 同理也不能用 html.lastIndexOf('</script>')：块之后还有别的脚本
+// （例如文件末尾的粒子雨），lastIndexOf 会跑到最后一个脚本的闭合处，
+// after 变空 —— 尾部脚本被静默删掉（2026-10-06 粒子雨就是这么丢的）。
+//
+// 正确做法：以块内 loader 脚本的固定收尾串为锚点，从锚点往后找闭合标签，
+// 这样一定落在整个自包含块的末尾，块之外的内容（含尾部脚本）原样保留。
+const ANCHOR = 'io.observe(stage);';
 const END = '</script>';
 const sIdx = html.search(START_RE);
 if (sIdx === -1) {
   console.error('✗ 没在 index.html 里找到 3D 工牌加载段（注释标记变了？）');
   process.exit(1);
 }
-const eIdx = html.lastIndexOf(END);
-if (eIdx === -1 || eIdx <= sIdx) {
-  console.error('✗ 找不到闭合 </script>');
+const aIdx = html.indexOf(ANCHOR, sIdx);
+if (aIdx === -1) {
+  console.error(`✗ 在 3D 工牌加载段里找不到收尾锚点 "${ANCHOR}"（loader 脚本改了？）`);
+  process.exit(1);
+}
+const eIdx = html.indexOf(END, aIdx);
+if (eIdx === -1) {
+  console.error('✗ 锚点之后找不到闭合 </script>');
   process.exit(1);
 }
 const before = html.slice(0, sIdx);
