@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>card face verify</title>
+<!-- 卡面贴合验证页（不属于站点，vite build 不会打包它）。
+     用与 Lanyard.tsx 逐字一致的 UV 常量，把 card-front/back.webp 合成到 card.glb 上，
+     相机按 ?view=back|front 放到对应一侧做离屏渲染。
+
+     为什么需要它：浏览器里拖拽工牌只会平移、不产生旋转（Lanyard 拖拽走
+     setNextKinematicTranslation，且 setAngvel 里的阻尼项会把卡回正到正面），
+     所以靠截图永远抓不到背面。这里绕开物理，直接确定性地出正/背两张图。
+
+     用法：
+       python tools/serve-static.py app 5299
+       node tools/lanyard-assets/shot_face.js http://127.0.0.1:5299 <outDir>
+
+     注意：别用 vite dev server 开这个页。引入 three/addons 会触发 vite 的依赖
+     预构建，而预构建收尾时的批量删除（.vite/deps_temp_*，>50 个文件）会被沙箱的
+     safe-delete 保护拦下，dev server 直接崩溃退出。用上面的静态服务器即可。 -->
+<style>html,body{margin:0;background:#050a12;overflow:hidden}canvas{display:block}</style>
+<script type="importmap">
+{
+  "imports": {
+    "three": "/node_modules/three/build/three.module.js",
+    "three/addons/": "/node_modules/three/examples/jsm/"
+  }
+}
+</script>
+</head><body>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+// 与 Lanyard.tsx 保持逐字一致的 UV 常量，确保验证的是真实贴合逻辑
+const FRONT_UV_RECT = { x: 0.0008, y: 0.0042, w: 0.4981, h: 0.7506 };
+const BACK_UV_RECT  = { x: 0.5014, y: 0.0022, w: 0.4986, h: 0.755 };
+const ATLAS_W = 1678, ATLAS_H = 1677;
+const OUT_W = 900, OUT_H = 1256;
+
+const VIEW = new URLSearchParams(location.search).get('view') || 'back';
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1);
+renderer.setSize(OUT_W, OUT_H, false);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x050a12);
+
+const camera = new THREE.PerspectiveCamera(18, OUT_W / OUT_H, 0.1, 400);
+
+scene.add(new THREE.AmbientLight(0xffffff, 2.4));
+const key = new THREE.DirectionalLight(0xffffff, 1.7);
+key.position.set(2, 6, 12);
+scene.add(key);
+const fill = new THREE.DirectionalLight(0xffffff, 0.9);
+fill.position.set(-6, -4, 10);
+scene.add(fill);
+
+const tex = (u) => new Promise((res, rej) => new THREE.TextureLoader().load(u, (t) => res(t.image), undefined, rej));
+const [frontImg, backImg] = await Promise.all([
+  tex('/src/components/lanyard/card-front.webp'),
+  tex('/src/components/lanyard/card-back.webp'),
+]);
+
+// 复刻 Lanyard.tsx 的 atlas 合成：front 画进左半，back 画进右半
+const atlas = document.createElement('canvas');
+atlas.width = ATLAS_W; atlas.height = ATLAS_H;
+const ctx = atlas.getContext('2d');
+ctx.fillStyle = '#050a12'; ctx.fillRect(0, 0, ATLAS_W, ATLAS_H);
+ctx.drawImage(frontImg, FRONT_UV_RECT.x * ATLAS_W, FRONT_UV_RECT.y * ATLAS_H,
+              FRONT_UV_RECT.w * ATLAS_W, FRONT_UV_RECT.h * ATLAS_H);
+ctx.drawImage(backImg, BACK_UV_RECT.x * ATLAS_W, BACK_UV_RECT.y * ATLAS_H,
+              BACK_UV_RECT.w * ATLAS_W, BACK_UV_RECT.h * ATLAS_H);
+
+const map = new THREE.CanvasTexture(atlas);
+map.colorSpace = THREE.SRGBColorSpace;
+map.flipY = false;
+map.anisotropy = 16;
+
+const gltf = await new GLTFLoader().loadAsync('/src/components/lanyard/card.glb');
+gltf.scene.traverse((o) => {
+  if (!o.isMesh) return;
+  if (o.name === 'card') {
+    o.material = new THREE.MeshPhysicalMaterial({
+      map, roughness: 0.9, metalness: 0.8, clearcoat: 1, clearcoatRoughness: 0.15,
+    });
+  } else {
+    o.material = new THREE.MeshStandardMaterial({ color: 0x9aa4b2, roughness: 0.3, metalness: 1 });
+  }
+});
+
+const group = new THREE.Group();
+group.scale.setScalar(2.25);
+group.position.set(0, -1.2, -0.05);
+group.add(gltf.scene);
+scene.add(group);
+
+// 自动把相机放到能完整装下卡片的位置，正/背面由 view 参数决定
+const bbox = new THREE.Box3().setFromObject(group);
+const size = bbox.getSize(new THREE.Vector3());
+const center = bbox.getCenter(new THREE.Vector3());
+const halfFov = THREE.MathUtils.degToRad(camera.fov / 2);
+const distY = (size.y / 2) / Math.tan(halfFov);
+const distX = (size.x / 2) / Math.tan(halfFov) / (OUT_W / OUT_H);
+const dist = Math.max(distY, distX) * 1.08;
+camera.position.set(center.x, center.y, center.z + (VIEW === 'back' ? -dist : dist));
+camera.lookAt(center.x, center.y, center.z);
+
+renderer.render(scene, camera);
+
+window.__READY__ = true;
+</script>
+</body></html>

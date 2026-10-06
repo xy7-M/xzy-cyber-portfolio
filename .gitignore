@@ -1,9 +1,40 @@
+# --- 构建产物 ---
 app/dist/
 app/node_modules/
+
+# --- 临时/截图脚本产物 ---
 tools/*.png
 .shot-preview.html
-tools/.chrome-profile/
 tools/iso*.png
 tools/lockup-*.png
 tools/zoom*.png
+
+# --- 无头浏览器 profile（脚本每次自动重建）---
+tools/**/.chrome-profile*
+**/.chrome-profile*
+
+# --- 开发期预览图 / 中间产物 ---
+preview-*.png
+preview-*/
+_read/
+_lanyard_tmp/
+cyber-*.png
+card-back-v2*.svg
+ui-design.png
+share-card.png
+share-qr.png
+
+# --- portfolio 部署目录 ---
+# index.html 是 standalone-html.mjs 的构建产物（17MB），单独保留以便追溯线上版本。
+# 其余部署时才需要的重物不进 git：视频 21MB、badge bundle 3.7MB、开发期截图 30MB。
+# 部署时由 tools/deploy-vercel-portfolio.sh 从源目录拷进临时部署目录。
+portfolio/shots*/
+portfolio/cyber-rooftop-*.mp4
+portfolio/badge/
+
+# --- 本地配置 ---
 .workbuddy-ai/
+.vercel/
+.env*
+_files.txt
+_gh_push.js

@@ -4,6 +4,7 @@ import Navigation from './sections/Navigation';
 import Hero from './sections/Hero';
 import Curriculum from './sections/Curriculum';
 import CinematicVision from './sections/CinematicVision';
+import PersonalCard from './sections/PersonalCard';
 import AlumniArchives from './sections/AlumniArchives';
 import Footer from './sections/Footer';
 import CapabilityDetail from './sections/CapabilityDetail';
@@ -59,6 +60,7 @@ function HomePage() {
         <Hero />
         <Curriculum />
         <CinematicVision />
+        <PersonalCard />
         <AlumniArchives />
         <Footer />
       </main>

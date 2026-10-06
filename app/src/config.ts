@@ -309,3 +309,27 @@ export const footerConfig: FooterConfig = {
     { label: "项目档案", href: "#alumni" },
   ],
 };
+
+// ============================================================
+// Personal Card (个人博客 · 3D 物理工牌)
+// ============================================================
+
+export interface PersonalCardConfig {
+  sectionLabel: string;
+  title: string;
+  paragraphs: string[];
+  hint: string;
+  fallbackText: string;
+}
+
+export const personalCardConfig: PersonalCardConfig = {
+  sectionLabel: "个人博客 / PROFILE",
+  title: "我是谁，交给这张工牌。",
+  paragraphs: [
+    "熊昭轶，网名梦逍遥。云南大学本科在读，非计算机专业，却把 AI 用成了自己的外骨骼。",
+    "右侧这张工牌是一个真实的 3D 物理对象：挂绳由多段刚体串联并带阻尼，拖动它会晃动，松手会自然回弹。",
+    "造物，求索，无限进步——这不是口号，是我每天运行的操作系统。",
+  ],
+  hint: "按住工牌拖动 · 松手自然回弹",
+  fallbackText: "正在装配 3D 工牌…",
+};
