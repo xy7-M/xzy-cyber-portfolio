@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>WHO AM I — 梦逍遥 · 作品集</title>
 <meta name="description" content="WHO AM I — 梦逍遥的个人作品集。影像、视觉与标识设计。">
-<meta name="theme-color" content="#04060d">
+<meta name="theme-color" content="#0b1220">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2304060d'/%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='%2300e5ff' stroke-width='3'/%3E%3Cpath d='M32 14 L32 50 M20 26 L32 14 L44 26' fill='none' stroke='%23ff2a6d' stroke-width='3'/%3E%3C/svg%3E">
 
 <style>
@@ -31,8 +31,8 @@
    1. TOKENS
    ============================================================ */
 :root{
-  --bg:#04060d;
-  --bg-2:#070b16;
+  --bg:#0b1220;
+  --bg-2:#101a2e;
   --panel:rgba(8,13,27,.94);
   --cyan:#00e5ff;
   --pink:#ff2a6d;
@@ -47,8 +47,9 @@
   --font-mono:'GeistMono',Consolas,'Microsoft YaHei UI',monospace;
   --font-cn:'GeistMono','Microsoft YaHei UI','Microsoft YaHei',sans-serif;
 
+  /* --pad-x / --sec-gap 的宽屏覆写见 §3 末（原为避开已删除的 HUD 侧栏） */
   --pad-x:clamp(20px,5.2vw,96px);
-  --sec-gap:clamp(96px,17vh,220px);
+  --sec-gap:clamp(96px,12vh,160px);
 }
 
 /* ============================================================
@@ -138,7 +139,7 @@ html{scrollbar-width:thin;scrollbar-color:var(--cyan) var(--bg-2);}
   position:absolute;left:0;right:0;bottom:0;height:18%;
   pointer-events:none;
   background:linear-gradient(180deg,
-    rgba(4,6,13,0) 0%,rgba(4,6,13,.34) 34%,rgba(4,6,13,.78) 68%,#04060d 100%);
+    rgba(11,18,32,0) 0%,rgba(11,18,32,.34) 34%,rgba(11,18,32,.78) 68%,#0b1220 100%);
   will-change:height;
 }
 /* --- global cyber overlays (site-wide) --------------------------- */
@@ -146,7 +147,7 @@ html{scrollbar-width:thin;scrollbar-color:var(--cyan) var(--bg-2);}
   position:fixed;inset:0;z-index:50;pointer-events:none;
   background:repeating-linear-gradient(0deg,
     rgba(0,0,0,.18) 0 1px,transparent 1px 3px);
-  opacity:.38;
+  opacity:.20;
 }
 .g-noise{
   position:fixed;inset:0;z-index:49;pointer-events:none;
@@ -163,7 +164,7 @@ html{scrollbar-width:thin;scrollbar-color:var(--cyan) var(--bg-2);}
 }
 .g-vignette{
   position:fixed;inset:0;z-index:50;pointer-events:none;
-  background:radial-gradient(circle at 50% 18%,transparent 42%,rgba(0,0,0,.58) 100%);
+  background:radial-gradient(circle at 50% 18%,transparent 62%,rgba(0,0,0,.22) 100%);
 }
 
 /* cyber language has no rounded corners — the second half of the scroll
@@ -193,12 +194,16 @@ html{scrollbar-width:thin;scrollbar-color:var(--cyan) var(--bg-2);}
 }
 
 /* --- HUD side rails: REMOVED (2026-10-06) ------------------------- */
-/* The left (SYSTEM: ONLINE / WHO AM I / clock) and right (INDEX / WORKS /
-   CONTACT) vertical rails were deleted on request. The content gutter
-   below is intentionally left untouched so the rest of the layout does
-   not shift; tighten --pad-x if the empty side space is unwanted. */
-@media (min-width:1180px){
-  :root{--pad-x:clamp(140px,10vw,200px);}
+/* 左右竖排侧栏已删除。原先为避开侧栏而在宽屏下把 --pad-x 顶到
+   140-200px 的覆写也随之作废 —— 那段空白本来就是侧栏占的，
+   侧栏没了就该还给内容。宽屏下改用 --bg 的区块辉光撑出呼吸感，
+   而不是靠加宽边距。 */
+/* 区块环境光：.pad / .badge-sec 原本没有自己的背景层，直接坐在
+   body 底色上，导致内容区与四周糊成一片。加一层极淡的中心青辉光，
+   让内容“浮”起来，四角自然退后。 */
+.pad,.badge-sec{
+  background:radial-gradient(120% 60% at 50% 30%,
+    rgba(0,229,255,.055),transparent 72%);
 }
 
 /* --- seam glitch band -------------------------------------------- */
@@ -454,7 +459,7 @@ section{position:relative;z-index:2;}
   border:1px solid rgba(0,229,255,.28);
   background:
     radial-gradient(120% 70% at 50% 0%,rgba(0,229,255,.06),transparent 70%),
-    linear-gradient(180deg,#050810 0%,#04060c 100%);
+    linear-gradient(180deg,#0d1526 0%,#0b1220 100%);
   box-shadow:
     inset 0 0 70px rgba(0,229,255,.06),
     0 24px 70px rgba(0,0,0,.6);
@@ -586,8 +591,8 @@ section{position:relative;z-index:2;}
    ============================================================ */
 .works{display:block;}
 
-.work{position:relative;border-top:1px solid rgba(0,229,255,.16);}
-.work:last-child{border-bottom:1px solid rgba(0,229,255,.16);}
+.work{position:relative;border-top:1px solid rgba(0,229,255,.30);}
+.work:last-child{border-bottom:1px solid rgba(0,229,255,.30);}
 
 .work a{
   position:relative;
