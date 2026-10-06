@@ -435,7 +435,7 @@ section{position:relative;z-index:2;}
   display:flex;align-items:center;justify-content:center;
   /* 内边距压到最小：屏幕的每一像素都让给卡片平面图。
      （原先 clamp(14px,3vw,44px) 在宽屏上白吃掉 88px 横向空间） */
-  padding:clamp(8px,1.4vw,22px);
+  padding:clamp(6px,1vw,16px);
   background:rgba(2,4,10,.82);
   backdrop-filter:blur(6px);
   -webkit-backdrop-filter:blur(6px);
@@ -445,10 +445,12 @@ section{position:relative;z-index:2;}
 
 .mxy-badge-modal-inner{
   position:relative;
-  display:flex;flex-direction:column;gap:clamp(10px,1.6vh,16px);
-  width:min(860px,100%);
+  display:flex;flex-direction:column;gap:clamp(6px,1vh,10px);
+  /* 1180px 够两张 0.716 竖版卡并排各占 ~520px 宽，字才看得清。
+     （原先 860px 时分到每张卡只剩 ~400px，正文小到糊） */
+  width:min(1180px,100%);
   max-height:100%;
-  padding:clamp(16px,2.4vw,26px);
+  padding:clamp(10px,1.2vw,16px);
   border:1px solid rgba(0,229,255,.28);
   background:
     radial-gradient(120% 70% at 50% 0%,rgba(0,229,255,.06),transparent 70%),
@@ -499,22 +501,25 @@ section{position:relative;z-index:2;}
 .mxy-badge-modal-sheets{
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:clamp(12px,2.2vw,26px);
+  gap:clamp(10px,1.6vw,22px);
   align-items:start;
-  /* 两张卡是 0.716 竖版，若按宽度撑满，高度很容易顶出视口 →
-     用 max-height 约束高度，让宽度反算回来，保证一屏看得全。 */
-  max-height:min(62vh,620px);
+  /* 两张卡是 0.716 竖版。旧值 min(62vh,620px) 让每张卡只有 ~425px 宽，
+     正文小到糊。这里改成「视口高度减去弹窗外框开销」反算，把能用的
+     高度全部吃掉：遮罩 padding(≤32px) + inner padding(≤32px) + head(~30px)
+     + hint(~18px) + gap(≤22px) ≈ 134px，故用 100vh - 140px 兜住。 */
+  max-height:min(calc(100vh - 140px),1180px);
   margin:0 auto;
+  width:100%;
 }
 .mxy-badge-sheet{
-  margin:0;display:flex;flex-direction:column;gap:10px;min-width:0;
+  margin:0;display:flex;flex-direction:column;gap:6px;min-width:0;
   max-height:100%;
 }
 .mxy-badge-sheet img{
   display:block;
   width:auto;height:100%;
   max-width:100%;
-  max-height:calc(min(62vh,620px) - 26px);
+  max-height:calc(min(100vh - 140px,1180px) - 28px);
   margin:0 auto;
   object-fit:contain;
   border:1px solid rgba(0,229,255,.16);
@@ -533,12 +538,13 @@ section{position:relative;z-index:2;}
 }
 
 @media (max-width:768px){
-  /* 单列堆叠时不能再用 62vh 的两列约束：两张卡叠起来必然超屏。
-     改成弹窗内容整体可滚 + 每张卡按宽度自适应（竖版卡在窄屏上
-     高度约为宽度的 1.4 倍，正好一屏能看一张半）。 */
-  .mxy-badge-modal{padding:10px;}
+  /* 单列堆叠时不能再用两列的高度约束：两张卡叠起来必然超屏。
+     改成弹窗内容整体可滚 + 每张卡按宽度撑满（竖版卡宽度即屏宽减边距，
+     字比原来大得多，滚一下看第二张即可）。 */
+  .mxy-badge-modal{padding:6px;}
   .mxy-badge-modal-inner{
-    padding:14px 12px;
+    padding:10px 8px;
+    width:100%;
     overflow-y:auto;
     overscroll-behavior:contain;
     -webkit-overflow-scrolling:touch;
@@ -546,7 +552,7 @@ section{position:relative;z-index:2;}
   .mxy-badge-modal-sheets{
     grid-template-columns:minmax(0,1fr);
     max-height:none;
-    gap:16px;
+    gap:14px;
   }
   .mxy-badge-sheet{max-height:none;}
   .mxy-badge-sheet img{
