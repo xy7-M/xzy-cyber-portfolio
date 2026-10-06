@@ -192,35 +192,13 @@ html{scrollbar-width:thin;scrollbar-color:var(--cyan) var(--bg-2);}
   to{background-position:0 44px,44px 0;}
 }
 
-/* --- HUD side rails ---------------------------------------------- */
-.rail{
-  position:fixed;top:50%;z-index:45;
-  display:flex;flex-direction:column;gap:20px;
-  font-size:11px;letter-spacing:3px;
-  color:var(--dim);
-  transform:translateY(-50%);
-  writing-mode:vertical-rl;
-  pointer-events:none;
-}
-.rail-left{left:18px;}
-.rail-right{right:18px;transform:translateY(-50%) rotate(180deg);}
-.rail span{text-transform:uppercase;}
-.rail-left span:nth-child(1){color:var(--green);text-shadow:0 0 10px rgba(56,242,161,.55);}
-.rail-left span:nth-child(2){color:var(--cyan);}
-.rail-right span:nth-child(1){color:var(--cyan);}
-.rail-right span:nth-child(2){color:var(--purple);}
-.rail-right span:nth-child(3){color:var(--pink);}
-
-/* Measured at 1440px: with writing-mode vertical-rl the three spans lay out
-   HORIZONTALLY, so each rail actually occupies ~80-110px of width, not the
-   ~14px its font size suggests. The content gutter has to clear that or the
-   work rows collide with the HUD. Below 1180px there is no room, so the
-   rails are dropped entirely. */
+/* --- HUD side rails: REMOVED (2026-10-06) ------------------------- */
+/* The left (SYSTEM: ONLINE / WHO AM I / clock) and right (INDEX / WORKS /
+   CONTACT) vertical rails were deleted on request. The content gutter
+   below is intentionally left untouched so the rest of the layout does
+   not shift; tighten --pad-x if the empty side space is unwanted. */
 @media (min-width:1180px){
   :root{--pad-x:clamp(140px,10vw,200px);}
-}
-@media (max-width:1179px){
-  .rail{display:none;}
 }
 
 /* --- seam glitch band -------------------------------------------- */
@@ -387,24 +365,34 @@ section{position:relative;z-index:2;}
 
 /* ============================================================
    6. 3D 工牌 — 可拖拽的物理工卡（原引语区块的位置）
+   左右两栏已删（信息工牌正面已有），改为居中舞台 + 背景粒子雨
    ============================================================ */
-.badge-sec{padding:var(--sec-gap) var(--pad-x);}
+/* section 全局规则已给 position:relative + z-index:2（见 §2 基础规则），
+   层叠上下文已经建好，这里不必再叠 isolation —— 雨幕的 z-index:0
+   正好落在该上下文内，压在工牌舞台之下、区块背景之上。 */
+.badge-sec{position:relative;padding:var(--sec-gap) var(--pad-x);}
 
-.badge-grid{
-  display:grid;
-  grid-template-columns:minmax(0,.85fr) minmax(0,1.65fr) minmax(0,.85fr);
-  gap:clamp(18px,3vw,52px);
-  align-items:center;
+/* 粒子雨：铺满整个区块（含 padding 区），在工牌背后下落 */
+.badge-rain{
+  position:absolute;inset:0;
+  width:100%;height:100%;display:block;
+  z-index:0;
+  pointer-events:none;   /* 绝不抢工牌的拖拽 / 点击 */
 }
+
+/* 内容压在雨幕之上 */
+.badge-sec > .sec-head,
+.badge-sec > .badge-stage{position:relative;z-index:1;}
 
 /* --- 中央舞台 --- */
 .badge-stage{
   position:relative;
+  width:min(100%,640px);
+  margin:0 auto;
   height:clamp(440px,64vh,660px);
   border:1px solid var(--line);
-  background:
-    radial-gradient(120% 68% at 50% 0%,rgba(0,229,255,.055),transparent 72%),
-    linear-gradient(180deg,rgba(4,6,13,0) 0%,rgba(0,229,255,.03) 100%);
+  /* 背景透明，让粒子雨透上来；保留内阴影做边缘辉光 */
+  background:transparent;
   box-shadow:inset 0 0 60px rgba(0,229,255,.07);
   overflow:hidden;
   /* 竖向滑动交给页面滚动，别被 canvas 吃掉 */
@@ -565,53 +553,13 @@ section{position:relative;z-index:2;}
   }
 }
 
-/* --- 左右两栏 --- */
-.badge-side{display:flex;flex-direction:column;gap:clamp(16px,2.4vh,26px);min-width:0;}
-.badge-side .side-k{
-  font-size:.62rem;letter-spacing:.3em;color:var(--cyan);
-  text-transform:uppercase;text-shadow:0 0 10px rgba(0,229,255,.45);
-}
+/* --- 左右两栏（.badge-side / .side-* / .badge-left / .badge-right）已整体删除 ---
+   原左栏 Identity 身份、右栏 Highlights 履历，信息与工牌正面重复，属冗余。
+   腾出的空间由 .badge-rain 粒子雨接管。相关死 CSS 一并清掉，避免留残留。 */
 
-.side-rows{display:flex;flex-direction:column;gap:13px;}
-.side-rows li{
-  display:flex;flex-direction:column;gap:3px;
-  border-top:1px solid rgba(0,229,255,.14);
-  padding-top:10px;
-}
-.side-rows .k{font-size:.6rem;letter-spacing:.26em;color:var(--dim2);text-transform:uppercase;}
-.side-rows .v{font-size:clamp(.86rem,1.15vw,1.02rem);letter-spacing:.08em;color:var(--text);}
-.side-rows .v.accent{color:var(--cyan);text-shadow:0 0 12px rgba(0,229,255,.4);}
-
-.side-list{display:flex;flex-direction:column;gap:12px;}
-.side-list li{
-  display:flex;gap:12px;align-items:baseline;
-  font-size:clamp(.82rem,1.1vw,.98rem);color:var(--text);
-}
-.side-list .n{font-size:.6rem;letter-spacing:.2em;color:var(--purple);}
-.side-list .t b{color:var(--yellow);font-weight:400;}
-
-.badge-left .side-mark{
-  margin-top:auto;display:flex;align-items:center;gap:12px;
-  color:var(--dim);
-}
-.badge-left .side-mark svg{width:clamp(38px,4.2vw,58px);height:auto;flex:none;}
-.badge-left .side-mark span{font-size:.62rem;letter-spacing:.28em;}
-
-.badge-right{text-align:right;align-items:flex-end;}
-.badge-right .side-list li{flex-direction:row-reverse;}
-.side-sign{
-  font-size:clamp(1.1rem,2.1vw,1.6rem);letter-spacing:.3em;color:var(--text);
-  text-shadow:0 0 18px rgba(0,229,255,.3);
-}
-.side-sign-en{font-size:.6rem;letter-spacing:.34em;color:var(--dim2);}
-
-/* 窄屏：单列，工牌在上 */
+/* 窄屏：舞台收窄、压低高度 */
 @media (max-width:900px){
-  .badge-grid{grid-template-columns:1fr;}
-  .badge-stage{height:clamp(380px,56vh,520px);order:-1;}
-  .badge-right{text-align:left;align-items:flex-start;}
-  .badge-right .side-list li{flex-direction:row;}
-  .badge-left .side-mark{margin-top:6px;}
+  .badge-stage{height:clamp(380px,56vh,520px);width:100%;}
 }
 
 /* --- 角落括号（工牌区块沿用） --- */
@@ -767,7 +715,6 @@ section{position:relative;z-index:2;}
   .hero-title{letter-spacing:.1em;}
   .g-scanlines{opacity:.28;}
   .g-noise{display:none;}
-  .rail{display:none;}
   /* The old `auto 1fr` let the CJK category column stretch the first track
      wide, shoving the English title off to the right — it read as the title
      being centred while the category sat left. Number alone in column 1, both
@@ -813,18 +760,6 @@ section{position:relative;z-index:2;}
 <div class="g-noise" aria-hidden="true"></div>
 <div class="g-vignette" aria-hidden="true"></div>
 
-<!-- HUD side rails -->
-<aside class="rail rail-left mono" aria-hidden="true">
-  <span>SYSTEM: ONLINE</span>
-  <span>WHO AM I</span>
-  <span id="clock">--:--:--</span>
-</aside>
-<aside class="rail rail-right mono" aria-hidden="true">
-  <span>INDEX</span>
-  <span>WORKS</span>
-  <span>CONTACT</span>
-</aside>
-
 <!-- ============================ HERO ============================ -->
 <section class="hero" id="hero">
   <div class="hero-sticky">
@@ -858,57 +793,29 @@ section{position:relative;z-index:2;}
 
 <!-- ======================= 3D 工牌 ======================= -->
 <section class="badge-sec" id="badge">
+  <!-- 背景粒子雨：铺满整块，工牌悬浮于雨幕之上（逻辑见文件末尾的 rain IIFE） -->
+  <canvas class="badge-rain" id="badgeRain" aria-hidden="true"></canvas>
+
   <header class="sec-head reveal">
     <span class="sec-no mono">01</span>
     <h2 class="sec-title mono">Identity Badge</h2>
     <span class="sec-rule" aria-hidden="true"></span>
   </header>
 
-  <div class="badge-grid">
-    <!-- 左：身份 -->
-    <div class="badge-side badge-left reveal">
-      <p class="side-k mono">Identity / 身份</p>
-      <ul class="side-rows">
-        <li><span class="k mono">姓名</span><span class="v">熊昭轶</span></li>
-        <li><span class="k mono">网名</span><span class="v accent">梦逍遥</span></li>
-        <li><span class="k mono">学籍</span><span class="v">云南大学 · 本科在读</span></li>
-        <li><span class="k mono">状态</span><span class="v">持续迭代中</span></li>
-      </ul>
-      <div class="side-mark">
-        <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
-          <circle cx="32" cy="32" r="23" stroke="#00e5ff" stroke-width="2"/>
-          <path d="M32 12 L32 52" stroke="#00e5ff" stroke-width="2"/>
-          <path d="M19 27 L32 12 L45 27" stroke="#ff2a6d" stroke-width="2"/>
-        </svg>
-        <span class="mono">XY--M / 2026</span>
-      </div>
-    </div>
-
-    <!-- 中：可拖拽的 3D 工牌 -->
-    <div class="badge-stage">
-      <span class="corner c-tl" aria-hidden="true"></span>
-      <span class="corner c-tr" aria-hidden="true"></span>
-      <span class="corner c-bl" aria-hidden="true"></span>
-      <span class="corner c-br" aria-hidden="true"></span>
-      <div class="badge-poster" aria-hidden="true"></div>
-      <!-- React 挂载点必须是独立空节点：createRoot 会清空容器的既有子节点，
-           把海报/提示放在同一个容器里会被抹掉。 -->
-      <div class="badge-mount" data-mxy-badge></div>
-      <p class="badge-hint mono">按住工牌拖动 · 点空白处看平面图</p>
-    </div>
-
-    <!-- 右：履历 -->
-    <div class="badge-side badge-right reveal">
-      <p class="side-k mono">Highlights / 履历</p>
-      <ul class="side-list">
-        <li><span class="n mono">01</span><span class="t">高考物理 <b>95+</b></span></li>
-        <li><span class="n mono">02</span><span class="t">全班第二 · 年级前三十</span></li>
-        <li><span class="n mono">03</span><span class="t">数学竞赛经历</span></li>
-        <li><span class="n mono">04</span><span class="t">GitHub 持续发布</span></li>
-      </ul>
-      <p class="side-sign">梦逍遥</p>
-      <p class="side-sign-en mono">MENGXIAOYAO</p>
-    </div>
+  <!-- 可拖拽的 3D 工牌。
+       原先左右两栏（Identity 身份 / Highlights 履历）已删除 —— 这些信息
+       工牌正面本来就有（熊昭轶 / 梦逍遥 / 云南大学 / MENGXIAOYAO），属冗余；
+       腾出的视觉重量改由背景粒子雨承担。舞台居中，工牌悬浮于雨幕之上。 -->
+  <div class="badge-stage">
+    <span class="corner c-tl" aria-hidden="true"></span>
+    <span class="corner c-tr" aria-hidden="true"></span>
+    <span class="corner c-bl" aria-hidden="true"></span>
+    <span class="corner c-br" aria-hidden="true"></span>
+    <div class="badge-poster" aria-hidden="true"></div>
+    <!-- React 挂载点必须是独立空节点：createRoot 会清空容器的既有子节点，
+         把海报/提示放在同一个容器里会被抹掉。 -->
+    <div class="badge-mount" data-mxy-badge></div>
+    <p class="badge-hint mono">按住工牌拖动 · 点空白处看平面图</p>
   </div>
 </section>
 
@@ -1013,7 +920,6 @@ section{position:relative;z-index:2;}
   var blackout  = document.getElementById('blackout');
   var band      = document.getElementById('band');
   var bar       = document.getElementById('bar');
-  var clockEl   = document.getElementById('clock');
 
   var clamp = function (v, a, b) { return v < a ? a : (v > b ? b : v); };
 
@@ -1205,17 +1111,6 @@ section{position:relative;z-index:2;}
   paintBar();
   initReveal();
   bootVideo();
-
-  // HUD clock
-  function tickClock() {
-    if (!clockEl) return;
-    var d = new Date();
-    var pad = function (n) { return n < 10 ? '0' + n : '' + n; };
-    clockEl.textContent =
-      pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
-  }
-  tickClock();
-  window.setInterval(tickClock, 1000);
 
   // re-evaluate on rotation / resize across the mobile breakpoint
   var onMq = function () {
@@ -5573,6 +5468,161 @@ void main() {
     }
   }, { rootMargin: '500px 0px' });
   io.observe(stage);
+})();
+</script>
+
+<script>
+/* ============================================================
+   粒子雨 — 工牌区块背景（替代原左右两栏）
+   ------------------------------------------------------------
+   青色数据流自顶部落下，工牌悬浮于雨幕之上。纯 Canvas 2D，
+   无外部依赖；三条性能保护：离屏即停 / 标签页隐藏即停 / 尊重
+   prefers-reduced-motion（此时只铺一帧静态雨幕，不跑循环）。
+   ============================================================ */
+(function () {
+  'use strict';
+
+  var cv = document.getElementById('badgeRain');
+  if (!cv) return;
+  var ctx = cv.getContext('2d');
+  if (!ctx) return;
+
+  var mqReduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var DPR = Math.min(window.devicePixelRatio || 1, 2);
+  var W = 0, H = 0;
+  var drops = [];
+  var raf = 0;
+  var last = 0, acc = 0;   // 累加式计时：暂停恢复后相位仍连续
+
+  // 站点色板：青为主，紫 / 粉点缀
+  var HUE = ['0,229,255', '0,229,255', '0,229,255', '0,229,255',
+             '168,85,247', '255,42,109'];
+
+  function rand(a, b) { return a + Math.random() * (b - a); }
+
+  // atTop=true 时散布全屏（初始化），false 时从顶部上方补进来。
+  // depth 制造景深：远景细/暗/慢，近景粗/亮/快，叠出空间层次。
+  function spawn(atTop) {
+    var depth = Math.random();
+    var len = rand(12, 30) + depth * 26;
+    return {
+      x: Math.random() * W,
+      y: atTop ? rand(-len, H) : rand(-len - 60, -len),
+      len: len,
+      v: 0.55 + depth * 2.9,                    // 下落速度 px/帧
+      w: 0.7 + depth * 1.2,                     // 线宽（<1 会自然变淡，正合远景）
+      a: 0.14 + depth * 0.62,                   // 基础透明度
+      hue: HUE[(Math.random() * HUE.length) | 0],
+      ph: Math.random() * 6.283                 // 呼吸相位
+    };
+  }
+
+  function build() {
+    // 密度随宽度走，上限兜住性能
+    var n = Math.max(50, Math.min(220, Math.round(W / 6)));
+    drops = [];
+    for (var i = 0; i < n; i++) drops.push(spawn(true));
+  }
+
+  function resize() {
+    var r = cv.getBoundingClientRect();
+    W = Math.max(1, Math.round(r.width));
+    H = Math.max(1, Math.round(r.height));
+    cv.width = Math.round(W * DPR);
+    cv.height = Math.round(H * DPR);
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);   // 之后一律按 CSS 像素作画
+    build();
+  }
+
+  // 画一帧。t 为秒，只用于明暗呼吸。
+  function draw(t) {
+    ctx.clearRect(0, 0, W, H);
+    for (var i = 0; i < drops.length; i++) {
+      var d = drops[i];
+      d.y += d.v;
+      if (d.y - d.len > H) { drops[i] = spawn(false); continue; }
+
+      var a = d.a * (0.7 + 0.3 * Math.sin(t * 2.2 + d.ph));
+      var top = d.y - d.len;
+
+      // 尾淡头亮：一根光丝该有的样子
+      var g = ctx.createLinearGradient(d.x, top, d.x, d.y);
+      g.addColorStop(0, 'rgba(' + d.hue + ',0)');
+      g.addColorStop(1, 'rgba(' + d.hue + ',' + a.toFixed(3) + ')');
+      ctx.strokeStyle = g;
+      ctx.lineWidth = d.w;
+      ctx.beginPath();
+      ctx.moveTo(d.x, top);
+      ctx.lineTo(d.x, d.y);
+      ctx.stroke();
+
+      // 头部亮点
+      ctx.fillStyle = 'rgba(' + d.hue + ',' + Math.min(1, a * 1.7).toFixed(3) + ')';
+      ctx.fillRect(d.x - d.w * 0.5, d.y - 1.4, d.w, 2.8);
+    }
+  }
+
+  function loop(now) {
+    if (last) acc += (now - last) / 1000;
+    last = now;
+    draw(acc);
+    raf = requestAnimationFrame(loop);
+  }
+
+  function start() {
+    if (raf || mqReduce.matches) return;   // 已在跑，或用户要求减少动效
+    last = 0;
+    raf = requestAnimationFrame(loop);
+  }
+  function stop() {
+    if (!raf) return;
+    cancelAnimationFrame(raf);
+    raf = 0;
+  }
+
+  resize();
+
+  // 尺寸变化 → 重建（合并到下一帧，避免连续 resize 反复重算）
+  var pending = 0;
+  if (window.ResizeObserver) {
+    new ResizeObserver(function () {
+      if (pending) return;
+      pending = requestAnimationFrame(function () {
+        pending = 0;
+        resize();
+        if (mqReduce.matches) draw(0);
+      });
+    }).observe(cv);
+  } else {
+    window.addEventListener('resize', resize);
+  }
+
+  // 离屏即停：滚出视口就没必要再算
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (es) {
+      for (var i = 0; i < es.length; i++) {
+        if (es[i].isIntersecting) start(); else stop();
+      }
+    }, { rootMargin: '160px 0px' }).observe(cv);
+  } else {
+    start();
+  }
+
+  // 标签页切走即停
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) stop(); else start();
+  });
+
+  // 跟随系统偏好切换
+  if (mqReduce.addEventListener) {
+    mqReduce.addEventListener('change', function () {
+      stop();
+      if (mqReduce.matches) draw(0); else start();
+    });
+  }
+
+  // 先铺一帧，避免进入视口瞬间空一下
+  draw(0);
 })();
 </script>
 
