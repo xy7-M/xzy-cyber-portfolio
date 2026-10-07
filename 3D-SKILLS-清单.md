@@ -8,8 +8,8 @@
 
 | 目录 | 装前 | 装后 |
 |---|---|---|
-| `C:\Users\__USER__\.workbuddy-ai\skills\` | 9 | 35 |
-| `C:\Users\__USER__\.agents\skills\` | 122 | 148 |
+| `~/.workbuddy-ai/skills/` | 9 | 35 |
+| `~/.agents/skills/` | 122 | 148 |
 
 每个 skill 均为一级子目录 + `SKILL.md`，已扁平化处理（原仓库为嵌套结构）。
 

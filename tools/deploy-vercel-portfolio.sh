@@ -16,7 +16,9 @@ set -euo pipefail
 
 SRC="$(cd "$(dirname "$0")/.." && pwd)"
 DEPLOY_DIR="/tmp/deploy/xzy-cyber-profile-portfolio"
-CRED="C:/Users/__USER__/.secrets/vercel/credentials.env"
+# 凭据路径：优先读环境变量 VERCEL_CRED，未设置时回退到用户主目录下的约定位置。
+# 不在仓库里写死本机绝对路径（避免泄露用户名与目录结构）。
+CRED="${VERCEL_CRED:-$HOME/.secrets/vercel/credentials.env}"
 PROJECT="xzy-cyber-profile"
 
 VERCEL_TOKEN="$(sed -n 's/^VERCEL_TOKEN=//p' "$CRED" | tr -d '\r' | tr -d '"' | tr -d "'")"

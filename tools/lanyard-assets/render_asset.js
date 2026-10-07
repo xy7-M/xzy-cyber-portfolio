@@ -9,7 +9,9 @@ const path = require('path');
   const W = parseInt(wArg, 10);
   const H = parseInt(hArg, 10);
 
-  const FONT = 'C:/Users/__USER__/OneDrive/Desktop/My Item/自我介绍/app/node_modules/geist/dist/fonts/geist-mono/GeistMono-Variable.woff2';
+  // 仓库根目录：从本脚本位置向上三级（tools/lanyard-assets/ -> 根）
+  const BASE = path.resolve(__dirname, '..', '..');
+  const FONT = path.join(BASE, 'app/node_modules/geist/dist/fonts/geist-mono/GeistMono-Variable.woff2');
   const fontB64 = fs.readFileSync(FONT).toString('base64');
 
   let html = fs.readFileSync(htmlPath, 'utf8');

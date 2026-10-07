@@ -4,7 +4,8 @@ const { chromium } = require('playwright');
 const fs = require('fs');
 const path = require('path');
 
-const BASE = 'C:/Users/__USER__/OneDrive/Desktop/My Item/自我介绍';
+// 仓库根目录：从本脚本位置向上三级（tools/lanyard-assets/ -> 根）
+const BASE = path.resolve(__dirname, '..', '..');
 const ATLAS = BASE + '/_tmp_work/atlas.png';
 const FRONT = BASE + '/app/src/components/lanyard/card-front.webp';
 const BACK = BASE + '/app/src/components/lanyard/card-back.webp';
