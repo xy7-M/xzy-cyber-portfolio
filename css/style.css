@@ -103,30 +103,7 @@ body {
   100% { transform: translate(2%, 2%); }
 }
 
-/* ---------- HUD 信息轨 ---------- */
-.rail {
-  position: fixed;
-  top: 50%;
-  z-index: 40;
-  display: flex;
-  flex-direction: column;
-  gap: 26px;
-  font-size: 11px;
-  letter-spacing: 3px;
-  color: var(--dim);
-  transform: translateY(-50%);
-  writing-mode: vertical-rl;
-}
-
-.rail-left { left: 18px; }
-.rail-right { right: 18px; writing-mode: vertical-rl; transform: translateY(-50%) rotate(180deg); }
-.rail span { text-transform: uppercase; }
-.rail span:nth-child(1) { color: var(--green); text-shadow: 0 0 10px rgba(56, 242, 161, .55); }
-.rail-right span:nth-child(1) { color: var(--cyan); }
-.rail-right span:nth-child(2) { color: var(--purple); }
-.rail-right span:nth-child(3) { color: var(--pink); }
-
-/* ---------- 背景音乐开关（右下角，避开 HUD 信息轨） ---------- */
+/* ---------- 背景音乐开关（右下角） ---------- */
 .audio-toggle {
   position: fixed;
   right: 26px;
@@ -1282,8 +1259,6 @@ body {
 }
 
 @media (max-width: 860px) {
-  .rail { display: none; }
-
   .nav-links {
     position: fixed;
     top: 0;
