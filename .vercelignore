@@ -3,7 +3,8 @@
 # 注意：不要写 *.md / *.png 这类宽泛通配，以免影响 app/ 子项目的构建。
 
 # --- 其他站点 / 子项目 ---
-app/
+# ⚠️ 不要在这里列 app/：Vercel 从【仓库根】读取本文件，对 rootDirectory=app 的
+#    app 项目同样生效，列了会把 app/package.json 删掉导致 vite build 失败（2026-10-11 踩过）。
 preview-dark/
 plugins/
 prompts/
@@ -21,4 +22,5 @@ README.md
 
 
 # portfolio/ 不能屏蔽：合并域名后 /works 由 portfolio/index.html 提供（见根 vercel.json）
+
 
