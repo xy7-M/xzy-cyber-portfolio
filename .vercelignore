@@ -1,0 +1,22 @@
+# .vercelignore — 只有当本仓库根目录被 Vercel 当作站点根（Root Directory = .）时才生效。
+# 目的：把自我介绍站（index.html + css/ js/ audio/ fonts/）以外的私有内容挡在公开发布之外。
+# 注意：不要写 *.md / *.png 这类宽泛通配，以免影响 app/ 子项目的构建。
+
+# --- 其他站点 / 子项目 ---
+app/
+portfolio/
+preview-dark/
+plugins/
+prompts/
+tools/
+
+# --- 仓库根的分析与文档文件 ---
+README.md
+3D-SKILLS-清单.md
+*.py
+
+# --- 其他 ---
+.workbuddy-ai/
+.claude/
+.workbuddy/
+
