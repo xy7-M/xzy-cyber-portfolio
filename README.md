@@ -69,7 +69,7 @@ git -c http.proxy=http://127.0.0.1:7897 push origin main
 4. 合并域名：作品集页从独立域名搬到 `/works`，旧域名保留 301 跳转，旧分享链接不失效。
 5. 删除本地冗余副本：`D:\Item AI\xzy-self-intro`、`xzy-cyber-profile-deploy`、
    `xzy-cyber-profile-portfolio`（备份为 `_backup-vercel-deploy-20261011.zip`）、扣子编程包
-   `coze-selfintro` 与旧自介绍副本 `xzy-cloudstudio-deploy`。
+   `coze-selfintro`（扣子包）、旧版自介绍副本 `xzy-cloudstudio-deploy`、以及 `To do list/intro-site`（2026-09 最早一版）。
 
 ## 历史：专属字体「梦逍遥」（已下线）
 
@@ -85,3 +85,4 @@ git -c http.proxy=http://127.0.0.1:7897 push origin main
 - GitHub 已发布项目：jobs-art（乔布斯思维框架）、todo-list（待办清单）、
   lpt-wall（匿名留言墙）、video-translate-studio（视频快译）
 - 掌握 UI 图设计、全栈网站打造、电脑 exe 文件下载交付
+
