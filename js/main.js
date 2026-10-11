@@ -430,22 +430,4 @@
     });
   }
 
-  /* ---------- 时钟 ---------- */
-  const clock = document.getElementById('clock');
-  if (clock) {
-    function updateClock() {
-      const parts = new Intl.DateTimeFormat('zh-CN', {
-        hour12: false,
-        timeZone: 'Asia/Shanghai',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-      }).formatToParts(new Date());
-      const map = {};
-      parts.forEach(function (p) { map[p.type] = p.value; });
-      clock.textContent = map.hour + ':' + map.minute + ':' + map.second;
-    }
-    updateClock();
-    setInterval(updateClock, 1000);
-  }
 })();
