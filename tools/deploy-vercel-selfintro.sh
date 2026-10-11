@@ -11,7 +11,7 @@
 #
 # 依赖文件（只有这 4 个，plugins/ 属另一个项目不部署）：
 #   index.html / css/style.css / js/main.js
-#   fonts/GeistMono-Variable.woff2 / audio/bgm.m4a
+#   fonts/GeistMono-Variable.woff2
 #
 # 沿用同一套坑规避：
 #   1. 部署源必须放 git 仓库【外】—— 仓库内 deploy 会被 TEAM_ACCESS_REQUIRED 拦下。
@@ -23,7 +23,7 @@
 set -euo pipefail
 
 SRC="$(cd "$(dirname "$0")/.." && pwd)"
-DEPLOY_DIR="/tmp/deploy/xzy-self-intro"
+DEPLOY_DIR="${DEPLOY_ROOT:-$HOME/deploy}/xzy-self-intro"
 # 凭据路径：优先读环境变量 VERCEL_CRED，未设置时回退到用户主目录下的约定位置。
 # 不在仓库里写死本机绝对路径（避免泄露用户名与目录结构）。
 CRED="${VERCEL_CRED:-$HOME/.secrets/vercel/credentials.env}"
@@ -37,12 +37,11 @@ if [ -z "$VERCEL_TOKEN" ]; then
 fi
 
 echo "→ 同步自我介绍站到 $DEPLOY_DIR"
-mkdir -p "$DEPLOY_DIR/css" "$DEPLOY_DIR/js" "$DEPLOY_DIR/fonts" "$DEPLOY_DIR/audio"
+mkdir -p "$DEPLOY_DIR/css" "$DEPLOY_DIR/js" "$DEPLOY_DIR/fonts"
 cp "$SRC/index.html" "$DEPLOY_DIR/"
 cp "$SRC/css/style.css" "$DEPLOY_DIR/css/"
 cp "$SRC/js/main.js" "$DEPLOY_DIR/js/"
 cp "$SRC/fonts/GeistMono-Variable.woff2" "$DEPLOY_DIR/fonts/"
-cp "$SRC/audio/bgm.m4a" "$DEPLOY_DIR/audio/"
 
 echo "→ 部署内容"
 du -sh "$DEPLOY_DIR" 2>/dev/null || true

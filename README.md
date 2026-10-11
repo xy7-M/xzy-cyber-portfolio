@@ -2,6 +2,8 @@
 
 赛博风格自我介绍网站 — 造物 · 求索 · 无限进步
 
+代码以 MIT 许可开源；自制品内容保留所有权利（详见文末「授权与来源」）。
+
 > 本仓库是**唯一源仓库**，承载「自我介绍站 + 作品集页 + React 版」三部分。
 > 两个旧仓库（`xzy-cyber-portfolio-page`、`xzy-cyber-profile-app`）已归档，不再维护。
 
@@ -22,7 +24,6 @@ python -m http.server 8000 --directory .
 - `css/style.css` — 赛博视觉（矩阵雨、霓虹斜切面板、扫描线、故障字、HUD 信息轨）
 - `js/main.js` — 矩阵雨、球形粒子云、开机引导、打字机、滚动入场
 - `fonts/` — 本地化 Geist Mono 字体，无外部 CDN 依赖
-- `audio/bgm.m4a` — 背景音乐
 - `portfolio/` — 作品集页（单文件 `index.html` + `fonts/` + `cyber-rooftop-scrub.mp4`）
 - `redirect/` — 旧域名 `xzy-cyber-profile.vercel.app` 的 301 存根
 - `vercel.json` — 路由：`/works` → `portfolio/index.html`，`/portfolio/*` → 301 到 `/works`
@@ -70,6 +71,17 @@ git -c http.proxy=http://127.0.0.1:7897 push origin main
 5. 删除本地冗余副本：`D:\Item AI\xzy-self-intro`、`xzy-cyber-profile-deploy`、
    `xzy-cyber-profile-portfolio`（备份为 `_backup-vercel-deploy-20261011.zip`）、扣子编程包
    `coze-selfintro`（扣子包）、旧版自介绍副本 `xzy-cloudstudio-deploy`、以及 `To do list/intro-site`（2026-09 最早一版）。
+
+6. 开源准备（2026-10-11）：移除第三方背景音乐（`audio/bgm.m4a` 与 `app/public/audio/` 副本）及页面上的
+   音乐开关与播放逻辑；抹掉历史与本机路径；提交作者邮箱统一为 noreply；新增 `LICENSE`（代码 MIT）。
+
+## 授权与来源
+
+- **代码**：MIT 许可，见 [`LICENSE`](LICENSE)。
+- **自制品内容**（页面文案、影像、图片、视频等）：除另有说明外**保留所有权利**，转载或商用请先联系作者。
+- **字体**：Geist Mono（Vercel 开源，SIL Open Font License 1.1）。
+- **背景音乐**：早期版本使用第三方曲目 *it's 6pm but I miss u already.*；为公开仓库的合规考虑**已整体移除**
+  （文件、页面上的音乐开关与播放逻辑）。如需背景音乐，请换用免版权或自产曲目。
 
 ## 历史：专属字体「梦逍遥」（已下线）
 

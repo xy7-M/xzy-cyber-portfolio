@@ -19,7 +19,7 @@
 set -euo pipefail
 
 SRC="$(cd "$(dirname "$0")/.." && pwd)"
-DEPLOY_DIR="/tmp/deploy/xzy-cyber-profile-deploy"
+DEPLOY_DIR="${DEPLOY_ROOT:-$HOME/deploy}/xzy-cyber-profile-deploy"
 # 凭据路径：优先读环境变量 VERCEL_CRED，未设置时回退到用户主目录下的约定位置。
 # 不在仓库里写死本机绝对路径（避免泄露用户名与目录结构）。
 CRED="${VERCEL_CRED:-$HOME/.secrets/vercel/credentials.env}"
@@ -34,8 +34,8 @@ fi
 echo "→ 同步静态文件到 $DEPLOY_DIR"
 mkdir -p "$DEPLOY_DIR"
 cp "$SRC/index.html" "$DEPLOY_DIR/"
-rm -rf "$DEPLOY_DIR/css" "$DEPLOY_DIR/js" "$DEPLOY_DIR/fonts" "$DEPLOY_DIR/audio"
-cp -r "$SRC/css" "$SRC/js" "$SRC/fonts" "$SRC/audio" "$DEPLOY_DIR/"
+rm -rf "$DEPLOY_DIR/css" "$DEPLOY_DIR/js" "$DEPLOY_DIR/fonts"
+cp -r "$SRC/css" "$SRC/js" "$SRC/fonts" "$DEPLOY_DIR/"
 
 cd "$DEPLOY_DIR"
 if [ ! -d .vercel ]; then
