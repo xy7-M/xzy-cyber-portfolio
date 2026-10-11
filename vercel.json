@@ -1,7 +1,11 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "trailingSlash": false,
   "redirects": [
-    { "source": "/portfolio/:path*", "destination": "/works/:path*", "permanent": true }
+    { "source": "/portfolio", "destination": "/works", "permanent": true },
+    { "source": "/portfolio/", "destination": "/works", "permanent": true },
+    { "source": "/portfolio/:path*", "destination": "/works/:path*", "permanent": true },
+    { "source": "/works/", "destination": "/works", "permanent": true }
   ],
   "rewrites": [
     { "source": "/works", "destination": "/portfolio/index.html" },
