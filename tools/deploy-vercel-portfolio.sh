@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+#
+# ⚠️ 已废弃（2026-10-11）：作品集页现由 xzy-self-intro 项目的 /works 路径提供（见根 vercel.json）。
+#    本脚本会把旧域名项目覆盖成作品集页、破坏 301 跳转，请勿再运行。
 # 把「WHO AM I」作品集页（portfolio/，含 3D 工牌）部署到 Vercel 生产环境。
 #
 # 与 tools/deploy-vercel.sh 的区别：

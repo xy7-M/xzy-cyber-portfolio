@@ -4,7 +4,6 @@
 
 # --- 其他站点 / 子项目 ---
 app/
-portfolio/
 preview-dark/
 plugins/
 prompts/
@@ -19,4 +18,7 @@ README.md
 .workbuddy-ai/
 .claude/
 .workbuddy/
+
+
+# portfolio/ 不能屏蔽：合并域名后 /works 由 portfolio/index.html 提供（见根 vercel.json）
 

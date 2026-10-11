@@ -27,9 +27,10 @@ share-qr.png
 # --- portfolio 部署目录 ---
 # index.html 是 standalone-html.mjs 的构建产物（17MB），单独保留以便追溯线上版本。
 # 其余部署时才需要的重物不进 git：视频 21MB、badge bundle 3.7MB、开发期截图 30MB。
-# 部署时由 tools/deploy-vercel-portfolio.sh 从源目录拷进临时部署目录。
+# 注意：作品集页已并入 xzy-self-intro 项目的 /works（见根 vercel.json），由 Git 部署直接取用仓库内文件。
 portfolio/shots*/
-portfolio/cyber-rooftop-*.mp4
+# 仅 scrub 版需要线上外链（已纳入 git）；自包含版的循环视频已 base64 内联。
+portfolio/cyber-rooftop-dolly-6s.mp4
 portfolio/badge/
 
 # --- 本地配置 ---
@@ -38,3 +39,6 @@ portfolio/badge/
 .env*
 _files.txt
 _gh_push.js
+
+
+

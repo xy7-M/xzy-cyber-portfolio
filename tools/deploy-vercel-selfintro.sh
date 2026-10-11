@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+#
+# ⚠️ 已由 Git 自动部署接管（2026-10-11）：项目 xzy-self-intro 已连接本仓库（Root Directory = .），
+#    push 到 main 即自动部署。本脚本保留为手动兜底，仅在上线流程出问题时使用。
 # 把根目录的旧版「自我介绍站」部署成一个【独立】的 Vercel 项目，
 # 与作品集页 xzy-cyber-profile 分开，互不覆盖。
 #

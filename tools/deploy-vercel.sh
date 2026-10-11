@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+#
+# ⚠️ 已废弃（2026-10-11）：本脚本曾把根目录自我介绍站推到旧域名项目 xzy-cyber-profile。
+#    该域名现改作 301 存根（redirect/），请勿再运行，否则会覆盖存根、破坏跳转。
 # 一键部署「赛博档案站」到 Vercel
 # 目标项目：xzy-cyber-profile  →  https://xzy-cyber-profile.vercel.app
 #

@@ -2,8 +2,8 @@
 
 赛博风格自我介绍网站 — 造物 · 求索 · 无限进步
 
-> 本仓库是**唯一源仓库**，同时承载三个站点（见「仓库与站点」）。历史上并存的
-> `xzy-cyber-portfolio-page`、`xzy-cyber-profile-app` 两个仓库已归档，不再维护。
+> 本仓库是**唯一源仓库**，承载「自我介绍站 + 作品集页 + React 版」三部分。
+> 两个旧仓库（`xzy-cyber-portfolio-page`、`xzy-cyber-profile-app`）已归档，不再维护。
 
 ## 本地打开
 
@@ -14,56 +14,62 @@ python -m http.server 8000 --directory .
 ```
 
 然后浏览器打开 http://localhost:8000
+（作品集页在 http://localhost:8000/portfolio/ ，与线上 `/works` 对应）
 
 ## 文件结构
 
-- `index.html` — 页面结构（身份 / 征途 / 能力系统 / 项目档案 / 内核）
+- `index.html` — 自我介绍站页面结构（身份 / 征途 / 能力系统 / 项目档案 / 内核）
 - `css/style.css` — 赛博视觉（矩阵雨、霓虹斜切面板、扫描线、故障字、HUD 信息轨）
 - `js/main.js` — 矩阵雨、球形粒子云、开机引导、打字机、滚动入场
 - `fonts/` — 本地化 Geist Mono 字体，无外部 CDN 依赖
 - `audio/bgm.m4a` — 背景音乐
-- `portfolio/` — 作品集页（单文件 `index.html` + `fonts/`），独立部署
+- `portfolio/` — 作品集页（单文件 `index.html` + `fonts/` + `cyber-rooftop-scrub.mp4`）
+- `redirect/` — 旧域名 `xzy-cyber-profile.vercel.app` 的 301 存根
+- `vercel.json` — 路由：`/works` → `portfolio/index.html`，`/portfolio/*` → 301 到 `/works`
 - `app/` — 同步内容的 React/Vite 版本，`npm run build` 后产物在 `app/dist`
-- `tools/` — 部署脚本（`deploy-*.sh`）与截图 / 校验脚本
+- `tools/` — 部署脚本（多数已废弃，见下）与截图 / 校验脚本
 
-## 仓库与站点
+## 站点与路由（合并域名后）
 
-| 站点 | 源目录 | Vercel 项目 | Root Directory |
-| --- | --- | --- | --- |
-| https://xzy-self-intro.vercel.app | 仓库根：`index.html` + `css/` `js/` `audio/` `fonts/` | `xzy-self-intro` | `.` |
-| https://xzy-cyber-profile.vercel.app | `portfolio/` | `xzy-cyber-profile` | `portfolio` |
-| React/Vite 版 | `app/` | `app` | `app` |
+| 地址 | 内容 | 来源 |
+| --- | --- | --- |
+| https://xzy-self-intro.vercel.app/ | 自我介绍站 | 仓库根 `index.html` + `css/` `js/` `audio/` `fonts/` |
+| https://xzy-self-intro.vercel.app/works | 作品集页 | `portfolio/index.html`（经根 `vercel.json` 重写） |
+| https://xzy-self-intro.vercel.app/portfolio/* | 302/301 跳转到 `/works/*` | 根 `vercel.json` 的 redirects |
+| https://xzy-cyber-profile.vercel.app/* （旧域名） | 301 跳转到 `…/works` | `redirect/` 目录（独立 Vercel 项目，Root Directory = `redirect`） |
+| React/Vite 版 | — | `app/`（Vercel 项目 `app`，Root Directory = `app`） |
 
-- 自我介绍站只依赖 5 个文件：`index.html`、`css/style.css`、`js/main.js`、
-  `fonts/GeistMono-Variable.woff2`、`audio/bgm.m4a`；仓库根其余内容（`app/` `tools/`
-  `prompts/` `plugins/` 等）由根目录 `.vercelignore` 挡在公开发布之外。
-- 作品集页只依赖 `portfolio/index.html` + `portfolio/fonts/*`。`cyber-rooftop-*.mp4` 与
-  `portfolio/badge/` 按 `.gitignore` 设计不进 git（部署时由脚本从源目录拷入）；
-  scrub 版视频缺失时，页面会自动回退到内联的循环视频。
+- 仓库根其余内容（`app/` `tools/` `prompts/` `plugins/` `preview-dark/` 等）由根 `.vercelignore`
+  挡在公开发布之外；`portfolio/` **不能**屏蔽，`/works` 依赖它。
+- 作品集页的资源引用全部是相对路径（`fonts/*`、`cyber-rooftop-scrub.mp4`），因此挂在 `/works`
+  下仍然正确；scrub 视频缺失时会自动回退到内联的循环视频。
 
-## 部署
+## 部署（Git 自动部署）
 
-当前状态（2026-10-11）：三个站点仍靠**本地 CLI 上传**，Vercel 项目尚未与本仓库建立 Git 连接，
-因此 push 到 `main` 不会自动上线。随时可手动部署：
+`xzy-self-intro`、`xzy-cyber-profile` 两个 Vercel 项目均已连接本仓库，**push 到 `main` 即自动部署**：
+前者 Root Directory = `.`（站点本体），后者 Root Directory = `redirect`（旧域名 301 存根）。
+
+补推送（本机直连 GitHub 会被 cmcc 掐断，走 Clash 代理）：
 
 ```bash
-bash tools/deploy-vercel-selfintro.sh    # 自我介绍站 → xzy-self-intro
-bash tools/deploy-vercel-portfolio.sh    # 作品集页   → xzy-cyber-profile
+git -c http.proxy=http://127.0.0.1:7897 push origin main
 ```
 
-`tools/deploy-vercel.sh` 是历史脚本（曾把根目录自我介绍站推到 `xzy-cyber-profile`，已被
-`deploy-vercel-selfintro.sh` 取代），保留仅作追溯。
+`tools/` 里的脚本状态：
 
-计划：把 Vercel 的 `xzy-self-intro`、`xzy-cyber-profile` 连接到本仓库并设置上表的
-Root Directory，之后 push 即自动部署，脚本退为手动兜底。仓库根已加入 `.vercelignore`
-作为该切换的前置保护。
+- `deploy-vercel-selfintro.sh` — 已由 Git 部署接管，**仅作手动兜底**
+- `deploy-vercel-portfolio.sh`、`deploy-vercel.sh` — **已废弃**，运行会覆盖旧域名存根、破坏 301，请勿使用
 
 ## 仓库收敛记录（2026-10-11）
 
-- `xzy-cyber-portfolio-page`（作品集页 GitHub Pages 镜像；内容过期、Pages 未开启）→ 已归档
-- `xzy-cyber-profile-app`（React 版旧快照，`src/App.tsx` 与本仓 `app/` 同源）→ 已归档
-- 本地 CLI 部署目录 `D:\Item AI\xzy-self-intro`、`xzy-cyber-profile-deploy`、
-  `xzy-cyber-profile-portfolio` → 已打包备份后删除（脚本运行时会重建）
+1. 归档 `xzy-cyber-portfolio-page`（作品集页 GitHub Pages 旧镜像）、`xzy-cyber-profile-app`
+   （React 版旧快照，`src/App.tsx` 与本仓 `app/` 同源）；归档前给两份 README 加了归档指引。
+2. 新增根 `.vercelignore`，把私有目录从公开发布中隔离。
+3. `portfolio/cyber-rooftop-scrub.mp4` 纳入 git（+12 MB），保证 Git 部署后作品集页的 scrub 交互可用。
+4. 合并域名：作品集页从独立域名搬到 `/works`，旧域名保留 301 跳转，旧分享链接不失效。
+5. 删除本地冗余副本：`D:\Item AI\xzy-self-intro`、`xzy-cyber-profile-deploy`、
+   `xzy-cyber-profile-portfolio`（备份为 `_backup-vercel-deploy-20261011.zip`）、扣子编程包
+   `coze-selfintro` 与旧自介绍副本 `xzy-cloudstudio-deploy`。
 
 ## 历史：专属字体「梦逍遥」（已下线）
 
