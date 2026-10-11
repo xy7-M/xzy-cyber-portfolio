@@ -40,4 +40,3 @@ python -m http.server 8000 --directory .
 - 熟练使用 WorkBuddy、Trae、Codex 等 AI Agent
 - GitHub 已发布项目：乔布斯艺术、To-Do List 待办清单、全英视频的摘录
 - 掌握 UI 图设计、全栈网站打造、电脑 exe 文件下载交付
-- 志向：成为非计算机类专业最会用 AI 的学生

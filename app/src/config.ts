@@ -60,7 +60,6 @@ export const heroConfig: HeroConfig = {
     { label: "EDU", text: "云南大学 · 本科在读" },
     { label: "MOTTO", text: "造物，求索，无限进步" },
     { label: "HOBBY", text: "看书 · 研究 AI" },
-    { label: "MISSION", text: "非计算机专业最会用 AI 的学生" },
   ],
   ctaText: "读取征途",
 };
@@ -194,7 +193,7 @@ export interface ArchitectureConfig {
 export const architectureConfig: ArchitectureConfig = {
   sectionLabel: "志向 / GOAL",
   videoPath: "videos/cinematic-vision.mp4",
-  title: "立志成为非计算机类专业最会用 AI 的学生。",
+  title: "非计算机专业 × AI 深度探索。",
   description:
     "高中一年，我从全班倒数第 10 进步到全班第二、年级前三十；拥有数学竞赛经历，高考物理 95+。高升大的暑假，我深入探索 AI，熟练使用 WorkBuddy、Trae、Codex 等 Agent，并在 GitHub 发布多个项目。造物，求索，无限进步——这不是口号，而是我每天运行的操作系统。",
 };
