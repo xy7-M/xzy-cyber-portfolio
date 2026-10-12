@@ -1,0 +1,33 @@
+{
+  "buildCommand": "node tools/build-public.js",
+  "outputDirectory": "./dist",
+  "nodeVersion": "22.11.0",
+  "redirects": [
+    { "source": "/portfolio", "destination": "/works", "statusCode": 301 },
+    { "source": "/portfolio/", "destination": "/works", "statusCode": 301 },
+    { "source": "/portfolio/*", "destination": "/works/:splat", "statusCode": 301 },
+    { "source": "/works/", "destination": "/works", "statusCode": 301 }
+  ],
+  "rewrites": [
+    { "source": "/works", "destination": "/portfolio/index.html" },
+    { "source": "/works/*", "destination": "/portfolio/:splat" }
+  ],
+  "headers": [
+    {
+      "source": "/fonts/*",
+      "headers": [{ "key": "Cache-Control", "value": "max-age=31536000" }]
+    },
+    {
+      "source": "/portfolio/fonts/*",
+      "headers": [{ "key": "Cache-Control", "value": "max-age=31536000" }]
+    },
+    {
+      "source": "/portfolio/badge/assets/*",
+      "headers": [{ "key": "Cache-Control", "value": "max-age=31536000" }]
+    },
+    {
+      "source": "/portfolio/*.mp4",
+      "headers": [{ "key": "Cache-Control", "value": "max-age=604800" }]
+    }
+  ]
+}
