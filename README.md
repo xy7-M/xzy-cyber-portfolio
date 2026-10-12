@@ -20,8 +20,8 @@ python -m http.server 8000 --directory .
 
 ## 文件结构
 
-- `index.html` — 自我介绍站页面结构（身份 / 征途 / 能力系统 / 项目档案 / 内核）
-- `css/style.css` — 赛博视觉（矩阵雨、霓虹斜切面板、扫描线、故障字、HUD 信息轨）
+- `index.html` — 自我介绍站页面结构（封面 / 身份 / 身份工牌 / 征途 / 能力系统 / 项目档案 / 内核）
+- `css/style.css` — 赛博视觉（矩阵雨、霓虹斜切面板、扫描线、故障字、HUD 信息轨；含封面与身份工牌样式）
 - `js/main.js` — 矩阵雨、球形粒子云、开机引导、打字机、滚动入场
 - `fonts/` — 本地化 Geist Mono 字体，无外部 CDN 依赖
 - `portfolio/` — 作品集页（单文件 `index.html` + `fonts/` + `cyber-rooftop-scrub.mp4`）
@@ -29,6 +29,12 @@ python -m http.server 8000 --directory .
 - `vercel.json` — 路由：`/works` → `portfolio/index.html`，`/portfolio/*` → 301 到 `/works`
 - `app/` — 同步内容的 React/Vite 版本，`npm run build` 后产物在 `app/dist`
 - `tools/` — 部署脚本（多数已废弃，见下）与截图 / 校验脚本
+
+> `index.html` 的**封面**与**身份工牌**直接复用 `portfolio/` 下的资源，不重复内联：
+> 封面视频为 `portfolio/cyber-rooftop-dolly-6s.mp4`；工牌为 `portfolio/badge/badge.js`
+> （自包含 bundle，贴图按自身 URL 解析到 `portfolio/badge/assets/`）。
+> ⚠️ `file://` 直开时浏览器禁止 ES module 导入，3D 工牌会**降级为静态平面图**；
+> 需要 3D 交互请走 http（本地 `python -m http.server` 或线上部署）。
 
 ## 站点与路由（合并域名后）
 

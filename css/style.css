@@ -1293,3 +1293,440 @@ body {
   #matrix,
   #cloud { display: none; }
 }
+
+/* ============================================================
+   封面（Cover）— 移植自作品集页 hero，作为站点第一屏
+   ============================================================ */
+.cover {
+  position: relative;
+  z-index: 1;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.cover-video {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cover-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(0, 229, 255, .07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 255, .07) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse at center, black 48%, transparent 78%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 48%, transparent 78%);
+  animation: grid-pan 7s linear infinite;
+}
+
+.cover-veil {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 78% 62% at 50% 44%,
+    rgba(0, 229, 255, 0) 26%, rgba(0, 229, 255, .30) 62%, rgba(0, 229, 255, .62) 100%);
+  mix-blend-mode: screen;
+  opacity: .10;
+}
+
+.cover-blackout {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 26%;
+  pointer-events: none;
+  background: linear-gradient(180deg,
+    rgba(4, 6, 13, 0) 0%, rgba(4, 6, 13, .34) 34%,
+    rgba(4, 6, 13, .78) 68%, var(--bg) 100%);
+}
+
+.cover-copy {
+  position: absolute;
+  z-index: 6;
+  left: clamp(18px, 5vw, 62px);
+  right: clamp(18px, 5vw, 62px);
+  bottom: clamp(44px, 11vh, 132px);
+  pointer-events: none;
+}
+
+.cover-kicker {
+  font-family: var(--font-mono);
+  font-size: clamp(.62rem, .82vw, .76rem);
+  letter-spacing: .34em;
+  color: var(--cyan);
+  text-shadow: 0 0 10px rgba(0, 229, 255, .5);
+  text-transform: uppercase;
+  margin-bottom: clamp(14px, 2.4vh, 26px);
+  opacity: .9;
+}
+
+.cover-kicker::before {
+  content: '';
+  display: inline-block;
+  width: clamp(24px, 4vw, 54px);
+  height: 1px;
+  background: var(--cyan);
+  vertical-align: middle;
+  margin-right: .9em;
+  box-shadow: 0 0 8px var(--cyan);
+}
+
+.cover-title {
+  position: relative;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(2.05rem, 8.4vw, 7.4rem);
+  line-height: .96;
+  letter-spacing: .14em;
+  color: var(--text);
+  text-shadow: 0 0 28px rgba(0, 229, 255, .34), 0 0 68px rgba(0, 229, 255, .14);
+  margin-bottom: clamp(14px, 2.6vh, 28px);
+}
+
+.cover-title::before,
+.cover-title::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  pointer-events: none;
+}
+
+.cover-title::before {
+  color: var(--cyan);
+  mix-blend-mode: screen;
+  animation: cover-ga 4.3s steps(1) infinite;
+}
+
+.cover-title::after {
+  color: var(--pink);
+  mix-blend-mode: screen;
+  animation: cover-gb 3.7s steps(1) infinite;
+}
+
+@keyframes cover-ga {
+  0%, 100% { transform: translate(-1.5px, 0); opacity: .34; }
+  46% { transform: translate(-1.5px, 0); opacity: .34; }
+  47% { transform: translate(-8px, 2px); opacity: .82; }
+  49% { transform: translate(5px, -2px); opacity: .62; }
+  51% { transform: translate(-1.5px, 0); opacity: .34; }
+  81% { transform: translate(-1.5px, 0); opacity: .34; }
+  82% { transform: translate(7px, -1px); opacity: .78; }
+  84% { transform: translate(-1.5px, 0); opacity: .34; }
+}
+
+@keyframes cover-gb {
+  0%, 100% { transform: translate(1.5px, 0); opacity: .30; }
+  33% { transform: translate(1.5px, 0); opacity: .30; }
+  34% { transform: translate(8px, -2px); opacity: .74; }
+  36% { transform: translate(-4px, 1px); opacity: .55; }
+  38% { transform: translate(1.5px, 0); opacity: .30; }
+  72% { transform: translate(1.5px, 0); opacity: .30; }
+  73% { transform: translate(-6px, 2px); opacity: .68; }
+  75% { transform: translate(1.5px, 0); opacity: .30; }
+}
+
+.cover-sub {
+  font-family: var(--font-mono);
+  font-size: clamp(.78rem, 1.05vw, .95rem);
+  letter-spacing: .22em;
+  color: var(--dim);
+}
+
+.cover-scroll {
+  position: absolute;
+  z-index: 6;
+  right: clamp(18px, 5vw, 62px);
+  bottom: clamp(44px, 11vh, 132px);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: .6rem;
+  letter-spacing: .34em;
+  color: var(--dim);
+  writing-mode: vertical-rl;
+}
+
+.cover-scroll::after {
+  content: '';
+  width: 1px;
+  height: clamp(34px, 7vh, 72px);
+  background: linear-gradient(180deg, var(--cyan), transparent);
+  animation: cover-hint 2.1s ease-in-out infinite;
+}
+
+@keyframes cover-hint {
+  0%, 100% { opacity: .35; transform: scaleY(.72); }
+  50% { opacity: 1; transform: scaleY(1); }
+}
+
+/* ============================================================
+   身份工牌（Identity Badge）— 移植自作品集页
+   置于 01 身份档案 与 02 征途日志 之间
+   ============================================================ */
+.badge-sec { overflow: hidden; }
+
+.badge-sec > .container { position: relative; z-index: 1; }
+
+.badge-stage {
+  position: relative;
+  width: min(100%, 640px);
+  margin: 0 auto;
+  height: clamp(440px, 64vh, 660px);
+  border: 1px solid var(--line);
+  background: transparent;   /* 露出站点全局背景（矩阵雨 / 粒子云） */
+  box-shadow: inset 0 0 60px rgba(0, 229, 255, .07);
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+.badge-stage .corner {
+  position: absolute;
+  width: clamp(16px, 2.2vw, 28px);
+  height: clamp(16px, 2.2vw, 28px);
+  border: 1px solid var(--cyan);
+  box-shadow: 0 0 12px rgba(0, 229, 255, .35);
+  z-index: 2;
+}
+
+.badge-stage .c-tl { top: 0; left: 0; border-right: 0; border-bottom: 0; }
+.badge-stage .c-tr { top: 0; right: 0; border-left: 0; border-bottom: 0; }
+.badge-stage .c-bl { bottom: 0; left: 0; border-right: 0; border-top: 0; }
+.badge-stage .c-br { bottom: 0; right: 0; border-left: 0; border-top: 0; }
+
+/* React 挂载点：铺满舞台，且必须是空节点 */
+.badge-mount { position: absolute; inset: 0; z-index: 1; }
+
+/* 静态海报：three + rapier 还在下载时先顶上，避免出现空框 */
+.badge-poster {
+  position: absolute;
+  inset: 9%;
+  z-index: 0;
+  background: url('../portfolio/badge/assets/card-front.webp') center/contain no-repeat;
+  opacity: .20;
+  filter: saturate(.85) blur(1.2px);
+  pointer-events: none;
+  transition: opacity .7s cubic-bezier(.22, .61, .36, 1);
+}
+
+.mxy-badge-ready .badge-poster { opacity: 0; }
+
+/* 加载失败降级（典型场景：file:// 直开时浏览器禁止 ES module 导入）：
+   改为展示静态名牌平面图，避免舞台空着。 */
+.badge-fallback .badge-poster { opacity: .92; filter: none; }
+.badge-fallback .badge-hint { display: none; }
+
+.badge-hint {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(12px, 2.4vh, 22px);
+  transform: translateX(-50%);
+  z-index: 2;
+  font-size: .6rem;
+  letter-spacing: .28em;
+  color: var(--dim);
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .6s ease .3s;
+}
+
+.mxy-badge-ready .badge-hint { opacity: .85; }
+
+/* badge bundle 自带 .lanyard-wrapper，这里补齐兜底尺寸 */
+.badge-stage .lanyard-wrapper { position: absolute; inset: 0; z-index: 0; }
+.badge-stage .lanyard-wrapper canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  touch-action: pan-y;
+}
+
+/* --- 工牌平面图弹窗（点舞台空白处唤起，由 badge bundle 渲染结构） --- */
+.mxy-badge-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(6px, 1vw, 16px);
+  background: rgba(2, 4, 10, .82);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: mxy-modal-in .22s cubic-bezier(.22, .61, .36, 1);
+}
+
+@keyframes mxy-modal-in { from { opacity: 0; } to { opacity: 1; } }
+
+.mxy-badge-modal-inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(6px, 1vh, 10px);
+  width: min(1180px, 100%);
+  max-height: 100%;
+  padding: clamp(10px, 1.2vw, 16px);
+  border: 1px solid rgba(0, 229, 255, .28);
+  background:
+    radial-gradient(120% 70% at 50% 0%, rgba(0, 229, 255, .06), transparent 70%),
+    linear-gradient(180deg, #0d1526 0%, #0b1220 100%);
+  box-shadow:
+    inset 0 0 70px rgba(0, 229, 255, .06),
+    0 24px 70px rgba(0, 0, 0, .6);
+  animation: mxy-sheet-in .26s cubic-bezier(.22, .61, .36, 1);
+  overflow: hidden;
+}
+
+@keyframes mxy-sheet-in {
+  from { opacity: 0; transform: translateY(16px) scale(.985); }
+  to { opacity: 1; transform: none; }
+}
+
+.mxy-badge-modal-corner {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--cyan);
+  pointer-events: none;
+  opacity: .85;
+}
+.mxy-badge-modal-corner.tl { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+.mxy-badge-modal-corner.tr { top: -1px; right: -1px; border-left: 0; border-bottom: 0; }
+.mxy-badge-modal-corner.bl { bottom: -1px; left: -1px; border-right: 0; border-top: 0; }
+.mxy-badge-modal-corner.br { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+
+.mxy-badge-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.mxy-badge-modal-title {
+  font-size: .64rem;
+  letter-spacing: .3em;
+  color: var(--cyan);
+  text-transform: uppercase;
+  text-shadow: 0 0 12px rgba(0, 229, 255, .45);
+}
+
+.mxy-badge-modal-close {
+  appearance: none;
+  cursor: pointer;
+  font-size: .6rem;
+  letter-spacing: .22em;
+  padding: 7px 13px;
+  color: var(--text);
+  border: 1px solid rgba(0, 229, 255, .3);
+  background: rgba(0, 229, 255, .05);
+  transition: background .18s ease, border-color .18s ease, color .18s ease;
+}
+
+.mxy-badge-modal-close:hover,
+.mxy-badge-modal-close:focus-visible {
+  background: rgba(0, 229, 255, .14);
+  border-color: rgba(0, 229, 255, .6);
+  outline: none;
+}
+
+.mxy-badge-modal-sheets {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(10px, 1.6vw, 22px);
+  align-items: start;
+  max-height: min(calc(100vh - 140px), 1180px);
+  margin: 0 auto;
+  width: 100%;
+}
+
+.mxy-badge-sheet {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  max-height: 100%;
+}
+
+.mxy-badge-sheet img {
+  display: block;
+  width: auto;
+  height: 100%;
+  max-width: 100%;
+  max-height: calc(min(100vh - 140px, 1180px) - 28px);
+  margin: 0 auto;
+  object-fit: contain;
+  border: 1px solid rgba(0, 229, 255, .16);
+  background: #020409;
+  box-shadow: 0 0 34px rgba(0, 229, 255, .08), 0 12px 30px rgba(0, 0, 0, .5);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.mxy-badge-sheet figcaption {
+  font-size: .58rem;
+  letter-spacing: .26em;
+  color: #4a5878;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.mxy-badge-modal-hint {
+  font-size: .55rem;
+  letter-spacing: .24em;
+  color: #4a5878;
+  text-transform: uppercase;
+  text-align: center;
+  opacity: .7;
+}
+
+/* ---------- 封面 / 工牌 响应式 ---------- */
+@media (max-width: 900px) {
+  .badge-stage { height: clamp(380px, 56vh, 520px); width: 100%; }
+}
+
+@media (max-width: 768px) {
+  .cover-scroll { display: none; }
+  .cover-title { letter-spacing: .1em; }
+
+  .mxy-badge-modal { padding: 6px; }
+  .mxy-badge-modal-inner {
+    padding: 10px 8px;
+    width: 100%;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+  .mxy-badge-modal-sheets {
+    grid-template-columns: minmax(0, 1fr);
+    max-height: none;
+    gap: 14px;
+  }
+  .mxy-badge-sheet { max-height: none; }
+  .mxy-badge-sheet img { width: 100%; height: auto; max-height: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cover-grid,
+  .cover-title::before,
+  .cover-title::after,
+  .cover-scroll::after { animation: none !important; }
+  .cover-title::before,
+  .cover-title::after { opacity: .22; }
+  .cover-video { display: none; }   /* 减少动效：封面退化为纯背景色 */
+}

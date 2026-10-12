@@ -31,6 +31,22 @@
     </ul>
   </nav>
 
+  <!-- 封面（Cover）— 移植自作品集页 hero，作为站点第一屏 -->
+  <section class="cover" id="cover">
+    <video class="cover-video" muted autoplay loop playsinline webkit-playsinline
+           preload="auto" disablepictureinpicture aria-hidden="true"
+           src="portfolio/cyber-rooftop-dolly-6s.mp4"></video>
+    <div class="cover-grid" aria-hidden="true"></div>
+    <div class="cover-veil" aria-hidden="true"></div>
+    <div class="cover-blackout" aria-hidden="true"></div>
+    <div class="cover-copy">
+      <p class="cover-kicker">Selected Works · 2026</p>
+      <p class="cover-title" data-text="WHO AM I">WHO AM I</p>
+      <p class="cover-sub">梦逍遥 · Felix</p>
+    </div>
+    <div class="cover-scroll" aria-hidden="true">SCROLL</div>
+  </section>
+
   <!-- HERO -->
   <header class="hero" id="hero">
     <div class="hero-hud mono" id="bootText" aria-hidden="true"></div>
@@ -94,6 +110,27 @@
               <span class="tag">云南大学</span>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 01.5 身份工牌（Identity Badge）— 移植自作品集页，置于 01 身份 与 02 征途 之间 -->
+    <section class="section badge-sec" id="badge">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="sec-index mono">★</span>
+          <h2 class="sec-title">BADGE<span class="zh">身份工牌</span></h2>
+          <span class="sec-line" aria-hidden="true"></span>
+        </div>
+        <div class="badge-stage">
+          <span class="corner c-tl" aria-hidden="true"></span>
+          <span class="corner c-tr" aria-hidden="true"></span>
+          <span class="corner c-bl" aria-hidden="true"></span>
+          <span class="corner c-br" aria-hidden="true"></span>
+          <div class="badge-poster" aria-hidden="true"></div>
+          <!-- React 挂载点必须是独立空节点：createRoot 会清空容器既有子节点 -->
+          <div class="badge-mount" data-mxy-badge></div>
+          <p class="badge-hint mono">按住工牌拖动 · 点空白处看平面图</p>
         </div>
       </div>
     </section>
@@ -264,6 +301,35 @@
   </footer>
 
   <script src="js/main.js"></script>
+
+  <!-- 3D 工牌：懒加载自包含 bundle（React + three.js + rapier）。
+       工牌贴图由 bundle 依据自身 URL 解析到 portfolio/badge/assets/，无需额外配置。 -->
+  <script type="module">
+  (function () {
+    'use strict';
+    var stage = document.querySelector('[data-mxy-badge]');
+    if (!stage) return;
+
+    var started = false;
+    function load() {
+      if (started) return;
+      started = true;
+      import('./portfolio/badge/badge.js').catch(function (err) {
+        console.warn('[badge] 3D 工牌未能加载，降级为静态平面图：', err && err.message);
+        var st = stage.closest('.badge-stage');
+        if (st) st.classList.add('badge-fallback');
+      });
+    }
+
+    if (!('IntersectionObserver' in window)) { load(); return; }
+    var io = new IntersectionObserver(function (entries) {
+      for (var i = 0; i < entries.length; i++) {
+        if (entries[i].isIntersecting) { load(); io.disconnect(); return; }
+      }
+    }, { rootMargin: '500px 0px' });
+    io.observe(stage);
+  })();
+  </script>
 </body>
 </html>
 
