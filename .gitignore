@@ -1,6 +1,7 @@
 # --- 构建产物 ---
 app/dist/
 app/node_modules/
+/dist/
 
 # --- 临时/截图脚本产物 ---
 tools/*.png
@@ -26,12 +27,14 @@ share-qr.png
 
 # --- portfolio 部署目录 ---
 # index.html 是 standalone-html.mjs 的构建产物（17MB），单独保留以便追溯线上版本。
-# 其余部署时才需要的重物不进 git：视频 21MB、badge bundle 3.7MB、开发期截图 30MB。
 # 注意：作品集页已并入 xzy-self-intro 项目的 /works（见根 vercel.json），由 Git 部署直接取用仓库内文件。
 portfolio/shots*/
-# 仅 scrub 版需要线上外链（已纳入 git）；自包含版的循环视频已 base64 内联。
-portfolio/cyber-rooftop-dolly-6s.mp4
-portfolio/badge/
+
+# --- 主页运行时依赖：必须入库（2026-10-12 起）---
+# 主页 index.html 的封面视频（cyber-rooftop-dolly-6s.mp4）与 3D 工牌
+# （badge/badge.js + badge/assets/*）直接引用这两个路径；
+# Git 部署（Vercel / EdgeOne）云端拉不到就会 404，故不再忽略。
+# 另：scrub 版视频本就入库，供作品集页外链。
 
 # --- 本地配置 ---
 .workbuddy-ai/
