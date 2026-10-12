@@ -2,6 +2,7 @@
 app/dist/
 app/node_modules/
 /dist/
+/dist-edgeone.zip
 
 # --- 临时/截图脚本产物 ---
 tools/*.png
