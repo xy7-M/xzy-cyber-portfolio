@@ -42,7 +42,8 @@ const INCLUDE = [
 const FORBIDDEN = [
   'tools', 'prompts', 'plugins', 'preview-dark', 'app', 'redirect',
   'node_modules', '.git', '.claude', '.workbuddy', '.workbuddy-ai',
-  'README.md', '3D-SKILLS-清单.md', 'LICENSE', 'vercel.json', 'edgeone.json',
+  // 注意：不含 edgeone.json —— dist/edgeone.json 是本脚本第 3 步有意生成的部署路由配置
+  'README.md', '3D-SKILLS-清单.md', 'LICENSE', 'vercel.json', 'iga.json',
   '.gitignore', '.vercelignore',
   'preview-works-before.png', 'preview-works-after.png',
   'preview-works-after-mobile.png', 'preview-works-hoverline-demo.png',
@@ -93,7 +94,21 @@ for (const rel of INCLUDE) {
   walk(src, rel);
 }
 
-/* 3) 保险丝检查 */
+/* 3) 生成部署用路由配置
+   EdgeOne 用「上传目录」方式部署时云端不做构建，所以要把一份
+   去掉构建字段的 edgeone.json 放进产物根，redirects/rewrites/headers 才会生效。 */
+const eoCfgPath = path.join(ROOT, 'edgeone.json');
+let routeCfgWritten = false;
+if (fs.existsSync(eoCfgPath)) {
+  const cfg = JSON.parse(fs.readFileSync(eoCfgPath, 'utf8'));
+  delete cfg.buildCommand;
+  delete cfg.outputDirectory;
+  delete cfg.nodeVersion;
+  fs.writeFileSync(path.join(OUT, 'edgeone.json'), JSON.stringify(cfg, null, 2) + '\n');
+  routeCfgWritten = true;
+}
+
+/* 4) 保险丝检查 */
 const leaked = FORBIDDEN.filter(function (f) {
   return fs.existsSync(path.join(OUT, f));
 });

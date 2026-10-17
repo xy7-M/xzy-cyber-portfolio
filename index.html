@@ -11,7 +11,6 @@
 </head>
 <body>
   <canvas id="matrix" aria-hidden="true"></canvas>
-  <canvas id="cloud" aria-hidden="true"></canvas>
   <div class="overlay scanlines" aria-hidden="true"></div>
   <div class="overlay noise" aria-hidden="true"></div>
   <div class="overlay vignette" aria-hidden="true"></div>
@@ -309,13 +308,26 @@
     if (!stage) return;
 
     var started = false;
+
+    // 降级：撤掉就绪标记，让 .badge-poster 重新显形（.mxy-badge-ready 会把它的 opacity 压到 0）
+    function fallback(reason) {
+      console.warn('[badge] 3D 工牌降级为静态平面图：' + reason);
+      document.documentElement.classList.remove('mxy-badge-ready');
+      var st = stage.closest('.badge-stage');
+      if (st) st.classList.add('badge-fallback');
+    }
+
     function load() {
       if (started) return;
       started = true;
-      import('./portfolio/badge/badge.js').catch(function (err) {
-        console.warn('[badge] 3D 工牌未能加载，降级为静态平面图：', err && err.message);
-        var st = stage.closest('.badge-stage');
-        if (st) st.classList.add('badge-fallback');
+      import('./portfolio/badge/badge.js').then(function () {
+        // bundle 加载成功 ≠ 渲染成功：WebGL 初始化失败时挂载点里不会出现 canvas，
+        // 而 mxy-badge-ready 是同步加上的，poster 已被隐藏 —— 不及时兜底就是一片空白。
+        setTimeout(function () {
+          if (!stage.querySelector('canvas')) fallback('挂载点内未生成 canvas（WebGL 可能不可用）');
+        }, 4000);
+      }).catch(function (err) {
+        fallback((err && err.message) || 'bundle 加载失败');
       });
     }
 

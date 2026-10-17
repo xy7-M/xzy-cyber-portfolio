@@ -21,6 +21,19 @@ README.md
 .claude/
 .workbuddy/
 
+# --- 本地档案与构建产物（2026-10-16 补）---
+# ⚠️ project-docs/ 是本地档案页，内含 GitHub 私有仓库清单，绝不可公开发布
+project-docs/
+/dist/
+dist-edgeone.zip
+dist-volc.zip
+iga.json
+
+# --- 子项目构建产物 ---
+# 只排产物、不排 app/ 源码：Vercel 从仓库根读本文件，对 rootDirectory=app
+# 的项目同样生效，整目录排除会让 app 项目构建失败（见上方 2026-10-11 的教训）。
+app/node_modules/
+app/dist/
 
 # portfolio/ 不能屏蔽：合并域名后 /works 由 portfolio/index.html 提供（见根 vercel.json）
 

@@ -24,11 +24,11 @@ python -m http.server 8000 --directory .
 - `css/style.css` — 赛博视觉（矩阵雨、霓虹斜切面板、扫描线、故障字、HUD 信息轨；含封面与身份工牌样式）
 - `js/main.js` — 矩阵雨、球形粒子云、开机引导、打字机、滚动入场
 - `fonts/` — 本地化 Geist Mono 字体，无外部 CDN 依赖
-- `portfolio/` — 作品集页（单文件 `index.html` + `fonts/` + `cyber-rooftop-scrub.mp4`）
+- `portfolio/` — 作品集页（`index.html` + `fonts/` + `badge/` + 两段无人机视频）
 - `redirect/` — 旧域名 `xzy-cyber-profile.vercel.app` 的 301 存根
 - `vercel.json` — 路由：`/works` → `portfolio/index.html`，`/portfolio/*` → 301 到 `/works`
 - `app/` — 同步内容的 React/Vite 版本，`npm run build` 后产物在 `app/dist`
-- `tools/` — 部署脚本（多数已废弃，见下）与截图 / 校验脚本
+- `tools/` — 部署脚本与截图 / 校验脚本（已废弃项隔离在 `_deprecated/`）
 
 > `index.html` 的**封面**与**身份工牌**直接复用 `portfolio/` 下的资源，不重复内联：
 > 封面视频为 `portfolio/cyber-rooftop-dolly-6s.mp4`；工牌为 `portfolio/badge/badge.js`
@@ -48,8 +48,9 @@ python -m http.server 8000 --directory .
 
 - 仓库根其余内容（`app/` `tools/` `prompts/` `plugins/` `preview-dark/` 等）由根 `.vercelignore`
   挡在公开发布之外；`portfolio/` **不能**屏蔽，`/works` 依赖它。
-- 作品集页的资源引用全部是相对路径（`fonts/*`、`cyber-rooftop-scrub.mp4`），因此挂在 `/works`
-  下仍然正确；scrub 视频缺失时会自动回退到内联的循环视频。
+- 作品集页的视频走**绝对路径**（`/portfolio/cyber-rooftop-*.mp4`）。`/works` 是 rewrite 出来的地址，
+  相对路径会被解析到站点根而 404（2026-10-16 实测确认），所以不能用相对引用；
+  scrub 版加载失败时会自动回退到循环版。
 
 ## 部署（Git 自动部署）
 
@@ -65,7 +66,8 @@ git -c http.proxy=http://127.0.0.1:7897 push origin main
 `tools/` 里的脚本状态：
 
 - `deploy-vercel-selfintro.sh` — 已由 Git 部署接管，**仅作手动兜底**
-- `deploy-vercel-portfolio.sh`、`deploy-vercel.sh` — **已废弃**，运行会覆盖旧域名存根、破坏 301，请勿使用
+- `_deprecated/` — 已废弃的 `deploy-vercel.sh` 与 `deploy-vercel-portfolio.sh`（2026-10-16 移入）。
+  运行会覆盖旧域名项目、破坏 301 跳转，**请勿运行**；文件保留在 git 历史中以便追溯
 
 ## 仓库收敛记录（2026-10-11）
 
@@ -80,6 +82,14 @@ git -c http.proxy=http://127.0.0.1:7897 push origin main
 
 6. 开源准备（2026-10-11）：移除第三方背景音乐（`audio/bgm.m4a` 与 `app/public/audio/` 副本）及页面上的
    音乐开关与播放逻辑；抹掉历史与本机路径；提交作者邮箱统一为 noreply；新增 `LICENSE`（代码 MIT）。
+
+## 变更记录（2026-10-16）
+
+1. **`portfolio/index.html` 瘦身**：把内联的 base64 循环视频（12.58 MB，实为
+   `cyber-rooftop-dolly-6s.mp4` 的一份副本）改为引用外部文件，单文件从 **16.46 MB 降到 3.88 MB**。
+2. **视频路径改用绝对路径** `/portfolio/cyber-rooftop-*.mp4`：`/works` 由 rewrite 提供，
+   相对路径会被解析到站点根并 404（已实测），故不能再依赖相对引用。
+3. **废弃部署脚本隔离**：两个已废弃的 Vercel 部署脚本移入 `tools/_deprecated/`，避免误运行破坏 301。
 
 ## 授权与来源
 

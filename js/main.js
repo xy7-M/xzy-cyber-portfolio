@@ -1,6 +1,6 @@
 /* ============================================================
    赛博档案站脚本
-   矩阵雨(两侧页边) / 中央球形流动粒子云 / 开机引导 / 打字机 / 滚动入场 / 计数 / 导航
+   矩阵雨(两侧页边) / 开机引导 / 打字机 / 滚动入场 / 计数 / 导航
    ============================================================ */
 (function () {
   'use strict';
@@ -15,9 +15,8 @@
     ? document.fonts.ready
     : Promise.resolve();
 
-  /* ---------- 矩阵雨：只落两侧页边，中央让位粒子云 ---------- */
-  /* 全局慢速系数 0.5：与粒子云自转（angle += dt * 0.0000825）同频
-     —— 粒子云约 76s 转一整圈，矩阵雨每格约 1.6s 落一格，两者节奏一致 */
+  /* ---------- 矩阵雨：只落两侧页边 ---------- */
+  /* 慢速下落：每格约 1.6s 落一格 */
   /* 移动端（窄屏 ≤768px 或触摸设备）不启动矩阵雨：
      屏幕小、字符密，观感噪杂且耗电；电脑端保留。
      用 matchMedia 监听，跨越阈值时动态启停（如手机横竖屏切换、桌面拖拽窗口）。 */
@@ -93,7 +92,7 @@
         if (y > height && Math.random() > 0.975) {
           drops[i] = 0;
         } else {
-          drops[i] += RAIN_SPEED; // 与粒子云同频的慢速下落
+          drops[i] += RAIN_SPEED; // 慢速下落
         }
       });
 
@@ -141,106 +140,6 @@
     }
 
     startRain();
-  }
-
-  /* ---------- 中央球形流动粒子云 ----------
-     移植自 赛博未来科技 CSS 系统 v1「背景层 · 粒子云」：
-     560 个透视投影旋转点云（窄屏/低配 200），球面分布 + 匀速自转 + 闪烁
-     注：已移除鼠标视差，粒子云不受指针影响，只按自身节奏旋转 */
-  const cloudCanvas = document.getElementById('cloud');
-  if (cloudCanvas) {
-    const cctx = cloudCanvas.getContext('2d');
-    const lowEnd = (navigator.hardwareConcurrency || 8) <= 4;
-    let cw = 0;
-    let ch = 0;
-    let pts = [];
-    let angle = 0;
-    let lastT = 0;
-
-    function clampN(v, a, b) { return Math.min(Math.max(v, a), b); }
-
-    /* 配色跟本站走：青为主、绿为辅、粉为火花（与矩阵雨同系三色） */
-    function pickRGB() {
-      const r = Math.random();
-      if (r < 0.62) return '0, 229, 255';
-      if (r < 0.92) return '56, 242, 161';
-      return '255, 42, 109';
-    }
-
-    function buildCloud() {
-      const n = (cw < 768 || lowEnd) ? 200 : 560;
-      pts = [];
-      for (let i = 0; i < n; i++) {
-        const u = Math.random() * 2 - 1;
-        const t = Math.random() * Math.PI * 2;
-        const r = 0.5 + Math.random() * 0.5;
-        const s = Math.sqrt(1 - u * u);
-        pts.push({
-          x: s * Math.cos(t) * r,
-          y: u * r * 0.72,
-          z: s * Math.sin(t) * r,
-          base: Math.random(),
-          ph: Math.random() * Math.PI * 2,
-          rgb: pickRGB()
-        });
-      }
-    }
-
-    function sizeCloud() {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      cw = window.innerWidth;
-      ch = window.innerHeight;
-      cloudCanvas.width = Math.round(cw * dpr);
-      cloudCanvas.height = Math.round(ch * dpr);
-      cloudCanvas.style.width = cw + 'px';
-      cloudCanvas.style.height = ch + 'px';
-      cctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      buildCloud();
-      if (reduced) drawCloud(0); // 降级动效时只留一帧静态
-    }
-
-    function drawCloud(dt) {
-      angle += dt * 0.0000825; // 0.000055 × 1.5：流动提速
-      cctx.clearRect(0, 0, cw, ch);
-      const cx = cw * 0.5;
-      const cy = ch * 0.50; // 球心下移：上下留白对称（原 0.40 下方空、上方挤）
-      const R = Math.min(cw, ch) * 0.46;
-      const FOV = 1.9;
-      // 固定视角：只保留自转 yaw 与恒定倾角，不再跟随鼠标
-      const yaw = angle;
-      const tilt = -0.16;
-      const ca = Math.cos(yaw), sa = Math.sin(yaw);
-      const cb = Math.cos(tilt), sb = Math.sin(tilt);
-
-      for (let i = 0; i < pts.length; i++) {
-        const p = pts[i];
-        const x1 = p.x * ca - p.z * sa;
-        const z1 = p.x * sa + p.z * ca;
-        const y1 = p.y * cb - z1 * sb;
-        const z2 = p.y * sb + z1 * cb;
-        const persp = FOV / (FOV + z2);
-        const sx = cx + x1 * R * persp;
-        const sy = cy + y1 * R * persp;
-        if (sx < -20 || sx > cw + 20 || sy < -20 || sy > ch + 20) continue;
-        const size = clampN(3.6 * persp * (0.45 + p.base), 1.4, 10);
-        const twinkle = 0.75 + 0.25 * Math.sin(angle * 55 + p.ph);
-        cctx.globalAlpha = clampN(0.30 * persp * (0.4 + p.base) * twinkle, 0.06, 0.95);
-        cctx.fillStyle = p.base > 0.86 ? '#EAFBFF' : 'rgb(' + p.rgb + ')';
-        cctx.fillRect(sx, sy, size, size);
-      }
-      cctx.globalAlpha = 1;
-    }
-
-    function loopCloud(t) {
-      const dt = lastT ? Math.min(t - lastT, 50) : 16;
-      lastT = t;
-      drawCloud(dt);
-      requestAnimationFrame(loopCloud);
-    }
-
-    sizeCloud();
-    window.addEventListener('resize', sizeCloud);
-    if (!reduced) requestAnimationFrame(loopCloud);
   }
 
   /* ---------- 开机引导 + 签名打字机 ---------- */
