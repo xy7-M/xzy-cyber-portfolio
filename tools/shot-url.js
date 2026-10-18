@@ -24,8 +24,9 @@ const CLIP_OFF = Number(process.argv[9]) || 0;  // 裁剪起点相对元素顶�
 const SCROLL_TO = Number(process.argv[10]) || 40; // 元素顶部停在视口往下多少 px 处
 const PORT = 9337;
 
-const fileUrl = 'file:///' + path.join(__dirname, '..', PAGE)
-  .replace(/\\/g, '/').replace(/ /g, '%20');
+// PAGE 可以是相对本仓库的路径，也可以是绝对路径（截别的项目用）
+const target = path.isAbsolute(PAGE) ? PAGE : path.join(__dirname, '..', PAGE);
+const fileUrl = 'file:///' + target.replace(/\\/g, '/').replace(/ /g, '%20');
 
 function getJson(p) {
   return new Promise((res, rej) => {
