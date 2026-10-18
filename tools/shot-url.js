@@ -18,6 +18,10 @@ const out = process.argv[3] || path.join(__dirname, 'shot-url.png');
 const VW = Number(process.argv[4]) || 1440;
 const VH = Number(process.argv[5]) || 900;
 const PAGE = process.argv[6] || 'index.html';
+const CLIP_H = Number(process.argv[7]) || 0;   // 只截视口顶部这么高，用于放大看细节
+const SCALE = Number(process.argv[8]) || 2;    // 配合 CLIP_H 的放大倍数
+const CLIP_OFF = Number(process.argv[9]) || 0;  // 裁剪起点相对元素顶部的偏移（负值=往上多截）
+const SCROLL_TO = Number(process.argv[10]) || 40; // 元素顶部停在视口往下多少 px 处
 const PORT = 9337;
 
 const fileUrl = 'file:///' + path.join(__dirname, '..', PAGE)
@@ -89,7 +93,7 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
       const el = document.querySelector('${selector}');
       if (!el) return 'not-found';
       const r = el.getBoundingClientRect();
-      window.scrollTo(0, window.scrollY + r.top - 40);
+      window.scrollTo(0, window.scrollY + r.top - ${SCROLL_TO});
       return JSON.stringify({ top: r.top, h: r.height });
     })()`,
     returnByValue: true,
@@ -112,10 +116,14 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   }
   const r = JSON.parse(rect.result.result.value);
 
-  const shot = await send('Page.captureScreenshot', {
-    format: 'png',
-    clip: { x: r.x, y: r.y, width: r.w, height: r.h, scale: 1 },
-  });
+  // CLIP_H > 0 才裁指定区域；否则直接拍当前视口。
+  // 注意 clip 用的是页面绝对坐标，超出视口的部分需要 captureBeyondViewport 才不是黑块。
+  const shotParams = { format: 'png' };
+  if (CLIP_H > 0) {
+    shotParams.clip = { x: 0, y: Math.max(0, r.y + CLIP_OFF), width: r.w, height: CLIP_H, scale: SCALE };
+    shotParams.captureBeyondViewport = true;
+  }
+  const shot = await send('Page.captureScreenshot', shotParams);
   fs.writeFileSync(out, Buffer.from(shot.result.data, 'base64'));
   console.log('wrote', out, r.w + 'x' + Math.round(r.h));
 

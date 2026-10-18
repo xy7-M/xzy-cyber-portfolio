@@ -179,6 +179,31 @@ body {
   z-index: 1;
 }
 
+/* 封面 → hero 的过渡遮罩。
+   封面是 100svh 的不透明块（背景色 + 视频），把 fixed 的粒子球与数码雨整块挡住，
+   于是画布在封面下边缘"啪"地一下冒出来，接缝是一条硬线。
+   这里在 hero 顶部铺一条从底色渐隐的遮罩：接缝两侧都是 --bg，边界看不出来；
+   画布在 150~280px 内由 0 渐到全亮，就是"虚化着出现"的效果。
+   z-index 0 —— 压在 .hero-content(2) / .hero-hud 之下，只盖画布，不盖文字。 */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: clamp(150px, 24vh, 280px);
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg,
+    var(--bg) 0%,
+    rgba(4, 6, 13, .96) 14%,
+    rgba(4, 6, 13, .82) 30%,
+    rgba(4, 6, 13, .58) 48%,
+    rgba(4, 6, 13, .32) 66%,
+    rgba(4, 6, 13, .12) 82%,
+    rgba(4, 6, 13, 0) 100%);
+}
+
 .hero-grid {
   position: absolute;
   inset: 0;
@@ -1363,9 +1388,11 @@ body {
   bottom: 0;
   height: 26%;
   pointer-events: none;
+  /* 提前到底色：最后 12% 保持纯 --bg，让封面底边与 hero 顶部遮罩同为底色，
+     接缝处不会有"视频残光 → 纯黑"的亮度台阶 */
   background: linear-gradient(180deg,
     rgba(4, 6, 13, 0) 0%, rgba(4, 6, 13, .34) 34%,
-    rgba(4, 6, 13, .78) 68%, var(--bg) 100%);
+    rgba(4, 6, 13, .82) 66%, var(--bg) 88%, var(--bg) 100%);
 }
 
 .cover-copy {

@@ -86,17 +86,18 @@ function getJson(p) {
   await sleep(1000);
   const f2 = JSON.parse(await fingerprint());
 
-  // 复算角速度
-  const R = Math.min(vw, vh) * 0.46;
+  // 复算角速度：固定值，不随视口变化（桌面与手机一致）
+  const SPIN_REF_R = 369;
   const surfacePxPerSec = RAIN_SPEED * RAIN_CELL * 60;
-  const omega = surfacePxPerSec / R;            // rad/s
-  const period = (2 * Math.PI) / omega;         // 秒/圈
+  const omega = (surfacePxPerSec / SPIN_REF_R) * (2 / 3);   // rad/s
+  const period = (2 * Math.PI) / omega;                     // 秒/圈
+  const R = Math.min(vw, vh) * 0.46;
 
   console.log('#particleTrail 存在 :', hasTrail, hasTrail ? '← 应该已删除' : '（已移除）');
   console.log('html.is-spinning    :', hasSpinClass);
   console.log('视口                :', vw + 'x' + vh, ' 球半径 R =', R.toFixed(1));
   console.log('数码雨线速度        :', surfacePxPerSec + ' px/s  (0.05 格/帧 × 16px × 60fps)');
-  console.log('球自转角速度        :', omega.toFixed(4), 'rad/s  ≈', (omega * 180 / Math.PI).toFixed(1), '°/s');
+  console.log('球自转角速度        :', omega.toFixed(4), 'rad/s  ≈', (omega * 180 / Math.PI).toFixed(1), '°/s（固定值，各视口相同）');
   console.log('转一圈耗时          :', period.toFixed(1), '秒');
   console.log('1s 内非透明像素     :', f1.n, '→', f2.n);
   console.log('1s 内像素指纹和     :', f1.sum, '→', f2.sum, f1.sum !== f2.sum ? '（有变化 → 在转）' : '（无变化 → 停住了）');

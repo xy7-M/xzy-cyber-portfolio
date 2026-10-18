@@ -161,7 +161,14 @@
     let cx = 0, cy = 0, R = 0;
     let cloudRaf = 0;
     let yaw = 0.4;           // 自转角
-    let spinPerMs = 0;       // 角速度（rad/ms），由数码雨线速度换算
+
+    /* 自转角速度：固定值，桌面与手机完全一致。
+       基准取「数码雨线速度 ÷ 基准球半径」再降到 2/3：
+       (0.05 格/帧 × 16px × 60fps) / 369 × 2/3 ≈ 0.0867 rad/s，约 72 秒转一圈。
+       这里刻意不除以本机半径 —— 除 R 会让球越小转得越快，手机上一圈只有桌面的一半时间。
+       改成固定角速度后两端观感一致，代价是球面线速度随半径变化（小屏上略慢）。 */
+    const SPIN_REF_R = 369;   // 1440×900 视口下的球半径：min(1440, 802) × 0.46
+    const SPIN_PER_MS = (RAIN_SPEED * RAIN_CELL * 60 / SPIN_REF_R) * (2 / 3) / 1000;
     let lastTick = 0;
     let pts = [];
     let pScale = 1;          // 窄屏整体缩一档，否则方点相对屏幕太大
@@ -207,15 +214,6 @@
       R = Math.min(cw, ch) * 0.46;
       pScale = cw < 768 ? 0.7 : 1;
 
-      /* 角速度换算：
-         数码雨每帧下落 RAIN_SPEED 格 × RAIN_CELL 像素，按 60fps 折算成每秒像素数，
-         这就是雨丝的线速度。让球赤道上一点的线速度与之相等 ——
-         即 ω = v / R —— 两种运动看起来才是同速的，而不是各转各的。
-         副作用：球越小转得越快（半径小、同样的线速度就要更大的角速度），
-         窄屏半径小，转一圈的时间会明显短于桌面，这是同一公式的必然结果。 */
-      const surfacePxPerSec = RAIN_SPEED * RAIN_CELL * 60;
-      spinPerMs = surfacePxPerSec / R / 1000;
-
       seed();
     }
 
@@ -223,7 +221,7 @@
       const dt = single ? 16 : Math.min(Math.max(now - lastTick, 1), 50);
       lastTick = now;
 
-      yaw += dt * spinPerMs;   // 匀速自转，没有加减速、没有惯性
+      yaw += dt * SPIN_PER_MS;   // 匀速自转，没有加减速、没有惯性
 
       const ca = Math.cos(yaw), sa = Math.sin(yaw);
       const cb = Math.cos(TILT), sb = Math.sin(TILT);
