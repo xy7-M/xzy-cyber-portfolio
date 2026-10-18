@@ -1813,24 +1813,26 @@ body {
   .panel .id-row:last-of-type { padding-bottom: 20px; }
   .label { font-size: 12px; letter-spacing: 2px; }
 
-  .panel-icon > * { margin-left: 18px; margin-right: 18px; }
+  .panel-icon > * { margin-left: 16px; margin-right: 16px; }
   /* .panel-glyph 桌面那条 margin 带 !important，这里必须一起带上才盖得住 */
-  .panel-glyph { width: 42px; height: 42px; margin: 18px auto 12px !important; }
-  .panel-glyph svg { width: 20px; height: 20px; }
-  .panel-icon h3 { font-size: 16px; }
-  .panel-icon .en { margin: 4px 0 9px; font-size: 9px; }
-  .panel-icon p:last-child { font-size: 12px; line-height: 1.65; padding-bottom: 20px; }
-  .pillar { padding: 24px 18px; }
+  .panel-glyph { width: 36px; height: 36px; margin: 14px auto 9px !important; }
+  .panel-glyph svg { width: 18px; height: 18px; }
+  .panel-icon h3 { font-size: 15px; letter-spacing: 1.5px; }
+  .panel-icon .en { margin: 3px 0 7px; font-size: 8.5px; letter-spacing: 1.5px; }
+  .panel-icon p:last-child { font-size: 11.5px; line-height: 1.6; padding-bottom: 15px; }
+  .pillar { padding: 22px 16px; }
 
   .system-grid,
-  .archive-grid { gap: 16px; }
+  .archive-grid { gap: 13px; }
 
-  .archive-card { padding: 20px; }
-  .archive-icon { width: 44px; height: 44px; margin: 16px 0 14px; }
-  .archive-icon svg { width: 22px; height: 22px; }
-  .archive-card h3 { font-size: 17px; }
-  .archive-card p:not(.en) { font-size: 12.5px; }
-  .archive-card .card-link { margin-top: 12px; }
+  .archive-card { padding: 16px; }
+  .archive-card .archive-head { padding-bottom: 10px; margin-bottom: 10px; }
+  .archive-icon { width: 36px; height: 36px; margin: 11px 0 9px; }
+  .archive-icon svg { width: 18px; height: 18px; }
+  .archive-card h3 { font-size: 16px; letter-spacing: 1.5px; }
+  .archive-card .en { font-size: 9px; letter-spacing: 1.5px; }
+  .archive-card p:not(.en) { font-size: 11.5px; line-height: 1.6; }
+  .archive-card .card-link { margin-top: 10px; font-size: 10px; }
 
   .btn { padding: 12px 22px; font-size: 13px; letter-spacing: 2px; }
   .hero-cta { gap: 12px; }
