@@ -363,10 +363,23 @@ body {
   letter-spacing: 4px;
 }
 
-/* 窄屏：字号再收一档，避免「熊昭轶」+「梦逍遥」纵向叠高后撑破视口 */
+/* 窄屏：字号再收一档，避免「熊昭轶」+「梦逍遥」纵向叠高后撑破视口。
+   光晕也必须一起收 —— 桌面那套 ±3px 色差偏移 + 18/52px 外发光是按 156px 的字调的，
+   套到 45px 的字上会把笔画糊成一团（手机上看着"字是虚的"就是这个原因）。 */
 @media (max-width: 640px) {
-  .hero-name { font-size: clamp(46px, 15vw, 62px); }
-  .hero-nick { font-size: clamp(32px, 10vw, 42px); }
+  .hero-name {
+    font-size: clamp(38px, 11.6vw, 50px);
+    letter-spacing: .10em;
+    filter:
+      drop-shadow(1.4px 0 0 rgba(255, 42, 109, .6))
+      drop-shadow(-1.4px 0 0 rgba(0, 229, 255, .6))
+      drop-shadow(0 0 7px rgba(60, 233, 164, .22));
+  }
+  .hero-nick {
+    font-size: clamp(24px, 8vw, 32px);
+    filter: drop-shadow(0 0 7px rgba(140, 120, 255, .3));
+  }
+  .hero-signature { text-shadow: 0 0 9px rgba(253, 224, 71, .3); }
   .hero-title-block { margin-inline: auto; }
 }
 
@@ -1774,4 +1787,53 @@ body {
   .cover-title::before,
   .cover-title::after { opacity: .22; }
   .cover-video { display: none; }   /* 减少动效：封面退化为纯背景色 */
+}
+
+/* ---------- 手机端整体收一档（2026-10-18） ----------
+   之前手机沿用的是桌面那套比例：区块留白 88px、工牌舞台 56vh、卡片内距 26px，
+   一屏塞不下两个区块，观感"太庞大"。这里统一收紧一档，不改变版式结构。 */
+@media (max-width: 640px) {
+  .section { padding: 62px 0; }
+  .hero { padding: 104px 18px 96px; }
+  .motto { padding: 26px 14px; }
+
+  /* 工牌舞台：原来 56vh（844 高的手机上 ≈473px）占掉大半屏 */
+  .badge-stage { height: clamp(258px, 38vh, 340px); }
+  .badge-stage .corner { width: 16px; height: 16px; }
+
+  .section-head { margin-bottom: 34px; gap: 13px; }
+  .sec-title { font-size: clamp(21px, 6.2vw, 28px); }
+  .sec-title .zh { font-size: .4em; margin-left: 9px; letter-spacing: .16em; }
+  .sec-index { font-size: 11px; padding: 4px 10px; letter-spacing: 1.5px; }
+
+  .panel .panel-head { margin-top: 20px; margin-bottom: 8px; padding-bottom: 14px; }
+  .panel .id-row,
+  .panel .panel-head { margin-left: 20px; margin-right: 20px; }
+  .id-row { padding: 11px 0; font-size: 14px; }
+  .panel .id-row:last-of-type { padding-bottom: 20px; }
+  .label { font-size: 12px; letter-spacing: 2px; }
+
+  .panel-icon > * { margin-left: 18px; margin-right: 18px; }
+  /* .panel-glyph 桌面那条 margin 带 !important，这里必须一起带上才盖得住 */
+  .panel-glyph { width: 42px; height: 42px; margin: 18px auto 12px !important; }
+  .panel-glyph svg { width: 20px; height: 20px; }
+  .panel-icon h3 { font-size: 16px; }
+  .panel-icon .en { margin: 4px 0 9px; font-size: 9px; }
+  .panel-icon p:last-child { font-size: 12px; line-height: 1.65; padding-bottom: 20px; }
+  .pillar { padding: 24px 18px; }
+
+  .system-grid,
+  .archive-grid { gap: 16px; }
+
+  .archive-card { padding: 20px; }
+  .archive-icon { width: 44px; height: 44px; margin: 16px 0 14px; }
+  .archive-icon svg { width: 22px; height: 22px; }
+  .archive-card h3 { font-size: 17px; }
+  .archive-card p:not(.en) { font-size: 12.5px; }
+  .archive-card .card-link { margin-top: 12px; }
+
+  .btn { padding: 12px 22px; font-size: 13px; letter-spacing: 2px; }
+  .hero-cta { gap: 12px; }
+  .tags { gap: 9px; }
+  .tag { font-size: 11px; padding: 5px 10px; }
 }

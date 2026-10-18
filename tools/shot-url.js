@@ -67,6 +67,15 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   await new Promise(r => { ws.onopen = r; });
   await send('Page.enable');
   await send('Runtime.enable');
+
+  // Chrome 在 Windows 上有最小窗口宽度（约 500px），直接给 390 会拿到 512 的视口。
+  // 窄视口改用设备模拟，才是真机的 CSS 像素宽度。
+  if (VW < 500) {
+    await send('Emulation.setDeviceMetricsOverride', {
+      width: VW, height: VH, deviceScaleFactor: 2, mobile: true,
+    });
+  }
+
   await send('Page.navigate', { url: fileUrl });
 
   let ready = false;
