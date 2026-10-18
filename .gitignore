@@ -44,5 +44,11 @@ portfolio/shots*/
 _files.txt
 _gh_push.js
 
-
-
+# --- 本地档案与构建产物（2026-10-18）---
+# project-docs/ 是本地生成的仓库档案页，内含 GitHub 私有仓库清单，不进版本库
+project-docs/
+dist-volc.zip
+iga.json
+.edgeone/
+.workbuddy/
+.wbapp_*.genie

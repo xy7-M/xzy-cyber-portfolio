@@ -685,6 +685,34 @@ body {
   font-size: 15px;
 }
 
+/* ---------- 粒子球：整站背景 ---------- */
+/* 固定层，钉在视口中央；z-index 0 与 #matrix 同层，靠 DOM 顺序压在数码雨之上。
+   正文所在的 .section 是 z-index 5，天然盖在球上面。 */
+.particle-cloud {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;      /* 不挡选区、不挡鼠标：拖拽事件挂在 document 上 */
+  opacity: 0;
+  transition: opacity 1.6s ease;
+  /* 球心不透明、向外柔和淡出，让球边缘融进背景而不是一个硬圆 */
+  -webkit-mask-image: radial-gradient(circle at 50% 46%, #000 0%, #000 46%, rgba(0, 0, 0, .7) 60%, transparent 78%);
+  mask-image: radial-gradient(circle at 50% 46%, #000 0%, #000 46%, rgba(0, 0, 0, .7) 60%, transparent 78%);
+}
+
+.particle-cloud.is-on { opacity: 1; }
+
+/* 窄屏没有鼠标，球只需居中即可 */
+@media (max-width: 900px) {
+  .particle-cloud {
+    -webkit-mask-image: radial-gradient(circle at 50% 40%, #000 0%, #000 40%, rgba(0, 0, 0, .5) 58%, transparent 76%);
+    mask-image: radial-gradient(circle at 50% 40%, #000 0%, #000 40%, rgba(0, 0, 0, .5) 58%, transparent 76%);
+  }
+}
+
 .tags {
   display: flex;
   gap: 12px;
